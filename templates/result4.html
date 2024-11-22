@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appliance Efficiency & Price Evaluator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+            hieght:80%;
+            text-align: center;
+            border: 2px solid #007bff;
+            position: relative;
+        }
+
+        .modal-header {
+            width: 95%;
+            background-color: #f2c61f; /* Orange color */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            position: relative;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -10px;
+            right: 8px;
+            background-color: #f2c61f;
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .close-button:hover {
+            background-color: black;
+        }
+
+        .modal-section {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .modal-left,
+        .modal-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .modal-left img {
+            width: 270px;
+            height: auto;
+        }
+
+        .modal-right img {
+            width: 250px;
+            height: auto;
+        }
+
+        
+        .modal-right h3 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        /* Positioning the price with z-index and moving it up */
+        .modal-left h3 {
+            position: relative;
+            font-weight: normal;
+            top: -70px; /* Moves it 2 lines (~40px) above */
+            z-index: 10; /* Ensures it stays on top */
+            font-size: 16px; /* Adjust font size if needed */
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Ensure text at the end is not bold */
+        .info-text {
+            font-weight: normal;
+            font-size: 14px;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <div class="container book">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h2>APPLIANCE EFFICIENCY & PRICE EVALUATOR</h2>
+            <a href="/index#book" class="close-button">&times;</a> <!-- Close Button -->
+        </div>
+
+        <!-- Modal Section -->
+        <div class="modal-section">
+            <div class="modal-left">
+                <img src="static/pr.png" alt="Price">
+                <h3><strong>PRICE:</strong> {{ price }} (Cost per Day Usage)</h3>
+ <!-- Positioned higher -->
+            </div>
+            <div class="modal-right">
+                <img src="static/ef.png" alt="Efficiency">
+                <h3 class="info-text"><strong>EFFICIENCY:</strong> {{ result }}</h3>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Energy Hub</title>
+    
+    <style>
+        :root {
+            --orange: #d4a010;
+            --black: #000000;
+            --white: #ffffff;
+            --light-gray: #666666;
+        }
+
+        * {
+            box-sizing: border-box;
+            outline: none;
+            text-decoration: none;
+            transition: all .2s linear;
+            font-family: Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-size: 16px;
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            padding: 2rem 9%;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            background: var(--orange);
+            color: var(--white);
+            padding: .8rem 3rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.7rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 165, 0, .2);
+            color: var(--orange);
+        }
+
+       
+header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #000000;
+    z-index: 1000;
+    display: flex;
+    /* align-items: baseline; */
+    /* justify-content: space-between; */
+    justify-content: space-between; /* Ensure space between logo, navbar, and login button */
+    padding: 0.3rem 9%;
+    max-height: 50%;
+   }
+   
+   header .logo {
+    font-size: 3rem;
+    font-weight: bolder;
+    align-items: baseline;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0.2 cm;
+   }
+   
+   header .logo span {
+    color: var(--orange);
+    font-size: 5rem;
+    margin: 0.2 cm;
+   }
+   
+   header .navbar.items {
+     display: flex;
+     justify-content:left; /* Center the navbar links */
+     align-items:start;
+     flex: 1; /* Allow the navbar to take up remaining space between logo and login button */
+   }
+   header .navbar a {
+    color: #fff;
+    font-size: 1.7rem;
+    margin: 0.8rem; 
+   }
+   
+   header .navbar a:hover {
+    color: var(--orange);
+   }
+   
+   header .icons i {
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.6rem;
+   }
+   
+   /* General button styles */
+   header .login-button-container, 
+   header .logout-button-container {
+     position: relative;
+     display: inline-block;
+     justify-items: end;
+     align-items: baseline;
+   }
+   
+   header .login-button img, 
+   header .logout-button img {
+     display: inline-block;
+     vertical-align: middle;
+     
+   }
+   /* For the login and logout button images */
+   
+   header .logout-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.8); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   /* For the login and logout button images */
+   header .login-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.9); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   
+   
+   /* Tooltip styling */
+   header .login-button .tooltip,
+   header .logout-button .tooltip {
+     position: absolute;
+     top: 100%;
+     left: 50%;
+     transform: translateX(-50%);
+     margin-top: 5px;
+     padding: 5px 10px;
+     background-color: var(--orange);
+     color: black;
+     border-radius: 5px;
+     white-space: nowrap;
+     font-size: 14px;
+     visibility: hidden;
+     opacity: 0;
+     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+     z-index: 1;
+   }
+   
+   /* Show the tooltip on hover */
+   header .login-button:hover .tooltip,
+   header .logout-button:hover .tooltip {
+     visibility: visible;
+     opacity: 1;
+   }
+   
+   /* Additional button styles */
+   header .login-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   header .logout-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   /* Image size adjustments if needed */
+   header .login-button img, 
+   header .logout-button img {
+     width: 40px; /* Adjust as needed */
+     height: 40px; /* Adjust as needed */
+   }
+   
+   header .login-button:hover img, 
+   header .logout-button:hover img {
+     opacity: 0.7; /* Optional hover effect on images */
+   }
+   
+   
+        #menu-bar {
+            color: var(--white);
+            border: .1rem solid var(--white);
+            border-radius: .5rem;
+            font-size: 3rem;
+            padding: .5rem 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        .form-container {
+            background-color: var(--orange);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 4rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container h2 {
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-bottom: .5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.5rem;
+            color: var(--black);
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-group select {
+            /* Ensure the select box has the same appearance as input fields */
+            background-color: var(--white);
+            border: 1px solid var(--light-gray);
+            appearance: none; /* Remove default arrow */
+            background: var(--white) url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiI+PHBhdGggZD0iTTEuMywwTDAsNk0wLDExTDEuMyw0TDExLDBMMTIsMkw1LDEwTDEsOSIvPjwvc3ZnPg==') no-repeat right center;
+            background-size: 20px;
+        }
+        
+        .form-group input[type="submit"] {
+            background-color: var(--orange);
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: var(--black);
+            color: var(--orange);
+        }
+
+        .loader-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Flipping Cards for Loading Animation */
+        .flipping-cards {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            color: var(--orange);
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0.2rem;
+            animation: flip 1s infinite;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateY(0);
+            }
+            50% {
+                transform: rotateY(180deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 2rem;
+            }
+
+            .form-container {
+                padding: 1rem;
+            }
+
+            header .navbar {
+                display: none;
+            }
+
+            #menu-bar {
+                display: initial;
+            }
+        }
+
+        @media (max-width: 450px) {
+            html {
+                font-size: 50%;
+            }
+
+            .heading span {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="bars"></div>
+        <a href="/index" class="logo"><span>E</span>nigma</a>
+        
+        <nav class="navbar">
+            <a href="/index#home">Home</a>
+            <a href="/index#book">Efficiency</a>
+            <a href="/index#portals">Portals</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/index#packages">Blogs</a>
+            <a href="/index#services">Visualizations</a>
+            <a href="/index#review">Review</a>
+            <a href="/index#contact">Contact</a>
+      
+            {% if 'user_id' in session %}
+            <div class="logout-button-container">
+              <a href="/logout" class="logout-button">
+                  <img src="static/login2.png" alt="Logout">
+                  <span class="tooltip">LOGOUT</span>
+              </a>
+          </div>
+      
+          {% else %}
+          <div class="login-button-container">
+            <a href="/login" class="login-button">
+                <img src="static/login.png" alt="Login">
+                <span class="tooltip">LOGIN</span>
+            </a>
+        </div>
+          {% endif %}
+        </nav>
+        <link rel="icon" type="image/png" href="static/icon.png">
+    </header>
+
+    <section>
+        <br><br><br><br>
+        <div class="form-container">
+            <br>
+            <h2 style="color: #000000;">ENTER PARAMETERS</h2>
+
+            <form id="energy-form" action="{{ url_for('process') }}" method="post">
+                <div class="form-group">
+                    <label for="pp_type">Power Plant Type:</label>
+                    <select id="pp_type" name="pp_type" required>
+                        <option value="Coal">Coal</option>
+                        <option value="Natural Gas">Natural Gas</option>
+                        <option value="Nuclear">Nuclear</option>
+                        <option value="Biomass">Biomass</option>
+                        <option value="Concentrated Solar">Concentrated Solar</option>
+                        <option value="Geothermal">Geothermal</option>
+                    </select>
+                    <br><br>
+                </div>
+   
+
+                <div class="form-group">
+                    <label for="AT">Ambient Temperature (Celsius degree):</label>
+                    <input type="number" id="AT" name="AT" required>
+                </div>
+                <div class="form-group">
+                    <label for="AP">Ambient Pressure (Hectopascals (hPa)):</label>
+                    <input type="number" id="AP" name="AP" required>
+                </div>
+                <div class="form-group">
+                    <label for="RH">Relative Humidity (Percentage):</label>
+                    <input type="number" id="RH" name="RH" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="EV">Exhaust Vacuum (Millimeters of Mercury (mmHg)):</label>
+                    <input type="number" id="EV" name="EV" required>
+                </div>
+                <div class="form-group">
+                    <label for="ActualEnergyValue">Actual Energy Value (MeV):</label>
+                    <input type="number" id="ActualEnergyValue" name="ActualEnergyValue" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="SUBMIT">
+                </div>
+            </form>
+        </div>
+    </section>
+    
+    <div class="loader-container" id="loader-container">
+        <div class="flipping-cards">
+            <div class="card">p</div>
+            <div class="card">r</div>
+            <div class="card">o</div>
+            <div class="card">c</div>
+            <div class="card">e</div>
+            <div class="card">s</div>
+            <div class="card">s</div>
+            <div class="card">i</div>
+            <div class="card">n</div>
+            <div class="card">g</div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('energy-form').addEventListener('submit', function(event) {
+            document.getElementById('loader-container').style.display = ''; // Show the loader
+        });
+        
+    </script>
+</body>
+</html>
+

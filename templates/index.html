@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Energy Hub</title>
+
+  <script src="static/carousel.js"></script>
+  <link rel="stylesheet" href="static/carousel.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Calling countries as dropdown -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function checkLoginAndSubscription(subscriptionType) {
+    $.get('/check_subscription/' + subscriptionType, function(data) {
+        if (!data.is_logged_in) {
+            // Store the intended action in sessionStorage before redirecting
+            sessionStorage.setItem('pending_action', subscriptionType);
+            window.location.href = '/login';
+        } else if (!data.has_subscription) {
+            // Clear any pending action
+            sessionStorage.removeItem('pending_action');
+            window.location.href = '/pricing';
+        } else {
+            // Show the modal immediately if the user has a subscription
+            showModal(subscriptionType);
+        }
+    });
+}
+
+function showModal(subscriptionType) {
+    $('#optionsModal' + (subscriptionType === 'pro' ? '2' : '3')).modal('show');
+}
+
+// Handle login form submission
+$('#loginForm').submit(function(e) {
+  e.preventDefault();
+  $.ajax({
+      url: '/login',
+      type: 'POST',
+      data: $(this).serialize(),
+      headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+      success: function(response) {
+          if (response.success) {
+              // Set a session storage flag indicating the user is logged in
+              sessionStorage.setItem('is_logged_in', true);
+              
+              var pendingAction = sessionStorage.getItem('pending_action');
+              if (pendingAction) {
+                  sessionStorage.removeItem('pending_action');
+                  checkLoginAndSubscription(pendingAction);
+              } else {
+                  window.location.href = '/index';
+              }
+          } else {
+              Swal.fire('Error', response.message, 'error');
+          }
+      }
+  });
+});
+
+$(document).ready(function() {
+  // Check for login status and handle pending actions
+  $.get('/check_login', function(data) {
+      if (data.is_logged_in) {
+          // User is logged in, check for pending actions
+          var pendingAction = sessionStorage.getItem('pending_action');
+          if (pendingAction) {
+              sessionStorage.removeItem('pending_action');
+              checkLoginAndSubscription(pendingAction);
+          }
+      } else {
+          // If not logged in, clear any pending actions
+          sessionStorage.removeItem('pending_action');
+          sessionStorage.removeItem('is_logged_in'); // Clear login state
+      }
+  });
+
+  // Check for subscription success (only if logged in)
+  $.get('/check_login_and_subscription', function(data) {
+      if (data.is_logged_in && data.subscription_success) {
+          showModal(data.subscription_success);
+          // Clear the subscription success status
+          $.post('/clear_subscription_success');
+      }
+  });
+});
+
+</script>
+  
+
+
+  <link rel="stylesheet" href="static/styles.css">
+  
+  <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+
+<body>
+
+  <header>
+
+    <div id="menu-bar" class="bars"></div>
+
+    <a href="#" class="logo"><span>E</span>nigma</a>
+    
+    <nav class="navbar">
+      <a href="#home">Home</a>
+      <a href="#book">Efficiency</a>
+      <a href="#portals">Portals</a>
+      <a href="/pricing">Pricing</a>
+      <a href="#packages">Blogs</a>
+      <a href="#services">Visualizations</a>
+      <a href="#review">Review</a>
+      <a href="#contact">Contact</a>
+
+      {% if 'user_id' in session %}
+      <div class="logout-button-container">
+        <a href="/logout" class="logout-button">
+            <img src="static/login2.png" alt="Logout">
+            <span class="tooltip">LOGOUT</span>
+        </a>
+    </div>
+
+    {% else %}
+    <div class="login-button-container">
+      <a href="/login" class="login-button">
+          <img src="static/login.png" alt="Login">
+          <span class="tooltip">LOGIN</span>
+      </a>
+  </div>
+    {% endif %}
+  </nav>
+  
+    
+  </header>
+  
+
+  <br><br><br>
+  <div class="container-fluid p-0">
+    <div id="videoCarousel" class="carousel slide carousel-dark" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#videoCarousel" data-slide-to="0"></li>
+        <li data-target="#videoCarousel" data-slide-to="1"></li>
+        <li data-target="#videoCarousel" data-slide-to="2" class="active"></li>
+        <li data-target="#videoCarousel" data-slide-to="3"></li>
+        <li data-target="#videoCarousel" data-slide-to="4"></li>
+        <li data-target="#videoCarousel" data-slide-to="5"></li>
+      </ol>
+      <div class="carousel-inner">
+        <!-- item 1 -->
+        <div class="carousel-item">
+          <a href="index.html">
+            <div class="video-container">
+              <video class="zoom-out2" autoplay muted>
+                <source src="static/pollution.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5 style="font-size: x-large;" >ENVIRONMENTAL DAMAGE</h5>
+              <p style="font-size: medium;" >Understand the effect of various forms of Energy on Nature</p>
+            </div>
+          </a>
+        </div>
+        <!-- item 2 -->
+        <div class="carousel-item">
+          <a href="index.html">
+            <div class="video-container">
+              <video class="zoom-out" autoplay muted>
+                <source src="static/wind1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5  style="font-size: x-large;">WIND ANALYTICS</h5>
+              <p style="font-size: medium;">Discover detailed wind energy stats across different countries</p>
+            </div>
+          </a>
+        </div>
+        <!-- item 3 Active -->
+        <div class="carousel-item">
+          <a href="index.html">
+            <div class="video-container">
+              <video autoplay muted>
+                <source src="static/dark.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5  style="font-size: x-large;">EFFICIENCY ASSESMENT TOOL</h5>
+              <p  style="font-size: medium;">Understand the amount of carbon emitted on an individual level</p>
+            </div>
+          </a>
+        </div>
+        <!-- item 4 -->
+        <div class="carousel-item active">
+          <a href="index.html">
+            <div class="video-container">
+              <video autoplay muted>
+                <source src="static/home.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5  style="font-size: x-large;">ELECTRICITY PRICE CALCULATOR</h5>
+              <p  style="font-size: medium;margin-bottom:40px;">Instantly Assess Your Electricity Costs and Uncover Potential Savings</p>
+            </div>
+          </a>
+        </div>
+        <!-- item 5 -->
+        <div class="carousel-item">
+          <a href="index.html">
+            <div class="video-container">
+              <video autoplay muted>
+                <source src="static/atom.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5  style="font-size: x-large; ">NUCLEAR ENERGY</h5>
+              <p  style="font-size: medium;">Understand the stats of nuclear energy utilized by the World</p>
+            </div>
+          </a>
+        </div>
+        <!-- item 6 -->
+        <div class="carousel-item">
+          <a href="index.html">
+            <div class="video-container">
+              <video autoplay muted>
+                <source src="static/solar.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="carousel-caption d-none d-md-block">
+              <h5 style="font-size: x-large;">SOLAR ENERGY</h5>
+              <p style ="font-size: medium;">World in Solar Energy is visualized through interactive dashboards</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#videoCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#videoCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  </div>
+  <!-- carousel ends --> 
+  <br><br>
+  <!-- checksection starts -->
+  <section class="book" id="book">
+    <h1 class="heading">
+      <span>c</span>
+      <span>h</span>
+      <span>e</span>
+      <span>c</span>
+      <span>k</span>
+      <span class="space"></span>
+      <span>n</span>
+      <span>o</span>
+      <span>w</span>
+    </h1>
+
+    <div class="row">
+      <div class="image">
+        <img src="static/el.svg" alt="Electricity Icon">
+      </div>
+      <form id="efficiencyForm" action="/predict4" method="POST">
+        <div class="country-inputBox">
+          <h3>Country</h3>
+          <select id="CountryName" name="CountryName">
+            <!-- Country options will be added here by JavaScript -->
+          </select>
+        </div>
+        
+        <div class="inputBox">
+          <h3>Device Type</h3>
+          <select id="DeviceType" name="DeviceType">
+            <!-- Device type options will be added here by JavaScript -->
+          </select>
+        </div>
+        
+        <div class="inputBox">
+          <h3>Brand Name</h3>
+          <select id="Brand" name="Brand" disabled>
+            <!-- Brand name options will be populated based on Device Type -->
+          </select>
+        </div>
+    
+        <div class="inputBox">
+          <h3>Energy/hr (kWh)</h3>
+          <input type="number" name="EnergyConsumption" placeholder="Enter energy usage per hour" step="0.01" min="0">
+        </div>
+        
+        <div class="inputBox">
+          <h3>Device Age (in months)</h3>
+          <input type="number" name="DeviceAgeMonths" placeholder="How long have you been using (in Months)?" min="0" step="1">
+        </div>
+        
+        <div class="inputBox">
+          <h3>Usage Hours/Day</h3>
+          <input type="number" name="UsageHoursPerDay" placeholder="How long do you use product in a day?" min="0" max="24" step="1">
+        </div>
+        
+        <div class="inputBox">
+          <h3>Number of Malfunction Incidents</h3>
+          <input type="number" name="MalfunctionIncidents" placeholder="How many malfunction incidents have occurred (if any)?" min="0" step="1">
+        </div>
+        
+        <input type="submit" class="btn" value="Check Efficiency">
+      </form>
+    </div>
+  
+
+
+    <!-- Modal -->
+    <div id="popupModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>APPLIANCE EFFICIENCY & PRICE EVALUATOR</h2>
+          <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-section">
+          <div class="modal-left">
+            <img src="Images/pr.png" alt="Price Image">
+            <h3>PRICE</h3>
+          </div>
+          <div class="modal-right">
+            <img src="Images/ef.png" alt="Efficiency Image">
+            <h3>EFFICIENCY</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- book section ends -->
+
+
+  <!-- packages section starts -->
+
+
+  <section class="portals" id="portals">
+
+    <h1 class="heading">
+      <span>p</span>
+      <span>o</span>
+      <span>r</span>
+      <span>t</span>
+      <span>a</span>
+      <span>l</span>
+      <span>s</span>
+    </h1>
+    <br><br><br><br>
+
+    <div class="box-container">
+
+      <div class="box">
+        <img src="static/hh1.jpg" alt="business_portal" >
+        <div class="content">
+          <br>
+          <h3> <i class="fas fa-map-marker-alt"></i> INDIVIDUAL </h3>
+          <p>Analyze the effect caused by your daily life routine on the environment</p>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+
+          <a href="#" class="btn" data-toggle="modal" data-target="#optionsModal">FREE</a>
+        </div>
+      </div>
+
+      <div class="modal fade" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header"style="background-color: black;">
+              <h3 class="modal-title" id="optionsModalLabel" style="color: rgb(202, 172, 23);">Select how to Proceed</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="color: yellow;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"style="background-color: black; padding: 20px;">
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container1"style="color: black;">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(13, 129, 17);">INDIVIDUALIZED CARBON FOOTPRINT CALCULATOR</h4>
+                    <p>Calculate the carbon emission per day in your life</p>
+                    <a href="/model1" class="btn btn-primary"style="color: white;">Select</a>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container2">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(162, 4, 75);" >VISUALIZATION</h4>
+                    <p style="color: rgb(0, 0, 0);"> View interactive dashboards based on the appliance data.</p>
+                    <a href="/viz1" class="btn btn-primary" style="color: rgb(248, 248, 248);">Select</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="box">
+        <img src="static/pp2.jpg" alt="">
+        <div class="content">
+          <br>
+          <h3> <i class="fas fa-map-marker-alt"></i>POWER PLANTS</h3>
+          <p>Examine various type of energy availability of various locations and switch to optimized strategy</p>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+           <a href="#" class="btn" data-toggle="modal" data-target="#optionsModal2" onclick="checkLoginAndSubscription('pro')">PRO</a>
+        </div>
+      </div>
+
+      <div class="modal fade" id="optionsModal2" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header"style="background-color: black;">
+              <h3 class="modal-title" id="optionsModalLabel" style="color: rgb(202, 172, 23);">Select how to Proceed</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="color: yellow;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"style="background-color: black; padding: 20px;">
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container4"style="color: black;">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(13, 129, 17);">ENERGY PREDICTION</h4>
+                    <p>Analyze and Predict the output of various energy sources </p>
+                    <a href="/model2" class="btn btn-primary"style="color: white;">Select</a>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container2">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(162, 4, 75);" >VISUALIZATION</h4>
+                    <p style="color: rgb(0, 0, 0);"> View interactive dashboards based on the numerous sources of energy</p>
+                    <a href="/viz3" class="btn btn-primary" style="color: rgb(248, 248, 248);">Select</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <img src="static/business.jpg" alt="">
+        <div class="content">
+          <br>
+          <h3> <i class="fas fa-map-marker-alt"></i> INDUSTRY </h3>
+          <p>Get personalized recommendations for efficiency and price reduction on large scale</p>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </div>
+          <a href="#" class="btn" data-toggle="modal" data-target="#optionsModal3" onclick="checkLoginAndSubscription('premium')">BUSINESS</a>
+        </div>
+      </div>
+
+      <div class="modal fade" id="optionsModal3" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header"style="background-color: black;">
+              <h3 class="modal-title" id="optionsModalLabel" style="color: rgb(202, 172, 23);">Select how to Proceed</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"style="color: yellow;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"style="background-color: black; padding: 20px;">
+              <div class="row">
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container3"style="color: black;">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(13, 129, 17);">ENERGY RECOMMENDATION SYSTEM</h4>
+                    <p>Personalized energy optimizing recommendatin tool designed with high confedentiality</p>
+                    <a href="/model3" class="btn btn-primary"style="color: white;">Select</a>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="option-box p-4 border"id="container2">
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <h4 style="color: rgb(162, 4, 75);" >VISUALIZATION</h4>
+                    <p style="color: rgb(0, 0, 0);"> View interactive dashboards based on various industries</p>
+                    <a href="/viz2" class="btn btn-primary" style="color: rgb(248, 248, 248);">Select</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </section>
+
+
+  <!-- packages section ends -->
+  
+  
+
+  <!-- services section starts -->
+  <section class="services" id="packages">
+    <br><br>
+    <h1 class="heading">
+      <span>b</span>
+      <span>l</span>
+      <span>o</span>
+      <span>g</span>
+      <span>s</span>
+    </h1>
+    <br><br>
+
+    <div class="box-container">
+
+      <div class="box">
+        <a href="/blog1" class="box-link">
+        <i class="fas fa-hotel"></i>
+        <h3>CLIMATE CHANGE IMPACTS</h3>
+        <p>Climate change is affecting every part of the globe in diverse and far-reaching ways. Rising temperatures are causing more frequent and severe weather events, altering ecosystems, and impacting human societies. The interplay between various climate factors is leading to........(Read More)</p>
+      </a>
+      </div>
+      <div class="box">
+        <a href="/blog2" class="box-link">
+        <i class="fas fa-utensils"></i>
+        <h3>RENEWABLE SOURCES OF ENERGY</h3>
+        <p>As the global community grapples with the challenges of climate change and the depletion of fossil fuels, renewable sources of energy offer a promising path forward. These energy sources are derived from natural processes that are replenished constantly and provide a sustainable.....(Read More)</p> </a>
+      </div>
+      <div class="box">
+        <a href="/blog3" class="box-link">
+        <i class="fas fa-bullhorn"></i>
+        <h3>CARBON EMISSIONS</h3>
+        <p>Carbon emissions, primarily in the form of carbon dioxide (CO₂), play a crucial role in climate change and environmental degradation. They are a byproduct of various human activities, particularly those related to energy production and......(Read More)</p></a>
+      </div>
+      <div class="box">
+        <a href="/blog4" class="box-link">
+        <i class="fas fa-globe-asia"></i>
+        <h3>FUTURE IN NUCLEAR ENERGY</h3>
+        <p>Nuclear energy has long been a controversial topic, balancing its potential for high energy output with concerns about safety and waste. As the world faces increasing energy demands and environmental challenges, the future of nuclear energy is being re-evaluated through.....(Read More)</p></a>
+      </div>
+      
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  </section> 
+
+  <!-- services section ends -->
+
+  <!-- blog section starts -->
+
+  <section class="packages" id="services">
+    <h1 class="heading">
+        <span>o</span>
+        <span>u</span>
+        <span>r</span>
+        <span class="space"></span>
+        <span>w</span>
+        <span>o</span>
+        <span>r</span>
+        <span>l</span>
+        <span>d</span>
+        <span class="space"></span>
+        <span>i</span>
+        <span>n</span>
+        <span class="space"></span>
+        <span>d</span>
+        <span>a</span>
+        <span>t</span>
+        <span>a</span>
+    </h1>
+    
+    <div class="box-container">
+      <br><br><br><br>
+        <div class="box">
+          <a href="/services1" class="content-link">
+            <div class="content">
+                <h3>POLLUTION DATA</h3><br>
+                <img src="static/imgpol.jpg" alt="Image 1" style="transform: scale(1.0, 1.1);">
+
+                <br>
+                <p  style="font-size: 120%; text-align: center;">Understand about the various components within the emitted Pollutants</p>
+            </div>
+        </a>
+        </div>
+        <div class="box">
+          <a href="/services2" class="content-link">
+            <div class="content">
+                <h3>OZONE CONCENTRATION</h3>
+                <img src="static/img3.jpg" alt="Image 2">
+                <p style="font-size: 120%; text-align: center;">View countries producing highest amount of ozone disintegration</p>
+            </div>
+          </a>
+        </div>
+        <div class="box">
+          <a href="/services3" class="content-link">
+            <div class="content">
+                <h3>TEMPERATURE ANOMALIES</h3>
+                <img src="static/imgtwmp.jpg" alt="Image 3">
+                <p style="font-size: 120%; text-align: center;">Undertstand the gegraphical aspect of channes in global temperature</p>
+            </div>
+          </a>
+        </div>
+        <div class="box">
+          <a href="/services4" class="content-link">
+            <div class="content">
+                
+                  <h3>CO2 Emssions</h3>
+                <img src="static/img2.jpg" alt="Image 4">
+                <p style="font-size: 120%; text-align: center;">View stats for country wise analyssis of catbon emmision</p>
+            </div>
+          </a>
+        </div>
+        <div class="box">
+          <a href="/services5" class="content-link">
+            <div class="content">
+                <h3>DEATH DUE TO NATURAL DISASTERS</h3>
+                <img src="static/img5.jpg" alt="Image 5">
+                <p  style="font-size: 120%; text-align: center;">Visuals about country-wise natural disaster deaths occured</p>
+            </div>
+          </a>
+        </div>
+        <div class="box">
+          <a href="/services6" class="content-link">
+                  <div class="content">
+                      <h3>NUCLEAR ENERGY </h3>
+                      <img src="static/img6.jpg" alt="Image 6">
+                      <p  style="font-size: 120%; text-align: center;">Learn about nuclear energy production across the globe</p>
+                  </div>
+                </a>
+            
+          </div>
+    </div>
+
+   
+</section>
+
+
+
+  <!-- blog section ends -->
+
+
+  <!-- review section starts  -->
+ 
+ <section class="review" id="review">
+
+    <h1 class="heading">
+      <span>r</span>
+      <span>e</span>
+      <span>v</span>
+      <span>i</span>
+      <span>e</span>
+      <span>w</span>
+    </h1>
+    <br><br>
+     <div class="swiper-container review-slider">
+
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/1.jpg" alt="">
+            <h3>Satya Nadella</h3>
+            <p>This innovative platform is a great example of leveraging technology to address critical global challenges. By optimizing energy use and enhancing awareness, it aligns perfectly with our vision of empowering every individual and organization to achieve more</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic2.jpg" alt="">
+            <h3>Ratan Tata</h3>
+            <p>Your initiative to optimize energy use in industries and raise awareness about carbon footprints is truly admirable. Such efforts are crucial for advancing sustainable development and can inspire significant positive changes in industrial practices</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic3.jpg" alt="">
+            <h3>Elon Musk</h3>
+            <p>This website is a forward-thinking approach to tackling energy efficiency and carbon footprints. It is impressive to see such a focus on optimizing industrial power use—something essential for sustainable progress</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic1.jpg" alt="">
+            <h3>Nirmala Sitaraman</h3>
+            <p>The energy optimization and carbon footprint calculator on this website are significant contributions towards achieving our sustainability goals</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic4.jpg" alt="">
+            <h3>Bhupendra Yadav</h3>
+            <p>This website's focus on optimizing energy use in industries and calculating carbon footprints is a timely and important initiative. It will play a key role in promoting sustainability and efficiency within various sectors</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic5.jpg" alt="">
+            <h3>Kier Starmer</h3>
+            <p>This platform demonstrates a proactive approach to energy efficiency and carbon footprint reduction. It's essential for addressing both environmental and economic challenges, and it's encouraging to see such innovative solutions in the industry sector</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="box">
+            <img src="static/pic6.jpg" alt="">
+            <h3>Sudha Murthy</h3>
+            <p>The website's focus on industry power optimization and carbon footprint calculations is commendable. It's important to educate and engage industries in sustainable practices, and this initiative could greatly contribute to positive environmental impact</p>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Pagination -->
+  <div class="swiper-pagination"></div>
+  <!-- Navigation -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+    </div> 
+
+  </section> 
+
+  <!-- review section ends -->
+
+
+
+
+  <!-- contact section starts -->
+
+  <section class="contact" id="contact">
+
+    <h1 class="heading">
+      <span>f</span>
+      <span>e</span>
+      <span>e</span>
+      <span>d</span>
+      <span>b</span>
+      <span>a</span>
+      <span>c</span>
+      <span>k</span>
+    </h1>
+
+    <div class="row">
+
+      <div class="image">
+        <img src="static/cnt.png" alt="" style="width: 60%; margin-left:40px;margin-bottom:50px;">
+      </div>
+
+      <form action="">
+        <div class="inputBox">
+          <input type="text" placeholder="Name">
+          <input type="email" placeholder="Email">
+        </div>
+        <div class="inputBox">
+          <input type="number" placeholder="Phone number">
+          <select name="subject" required>
+            <option value="" disabled selected hidden>Subject</option>
+            <option value="complaint">Complaint</option>
+            <option value="query">Query</option>
+            <option value="review">Review</option>
+          </select>
+        </div>
+        <textarea placeholder="message" name="msg" id="msg" cols="30" rows="10"></textarea>
+        <input type="submit" class="btn" value="send message">
+      </form>
+
+    </div>
+
+  </section>
+
+  <!-- feedback section ends -->
+
+
+
+
+  <!-- footer section starts -->
+
+  <section class="footer">
+
+    <div class="box-container">
+
+      <div class="box">
+        <h3>about us</h3>
+        <p style="text-transform: none;">Enigma is a website aimed at providing paid and free services for industries and household to optimize energy consumption and therby satisfy SDG Goals</p>
+      </div>
+      <div class="box">
+        <h3>branch locations</h3>
+        <a href="#">Pune, India</a>
+        <a href="#">Las Vegas, USA</a>
+      </div>
+      <div class="box">
+        <h3>follow us</h3>
+        <a href="#">instagram</a>
+        <a href="#">twitter</a>
+        <a href="#">linkedin</a>
+      </div>
+      <div class="box">
+        <h3>Live Data Usage</h3>
+        <a href ="/trends">Click here to view your usage trends</a>
+      </div>
+    </div>
+    <h1 class="credit"> created by <span> Diyotrim, Jiss, Shreya </span> | All rights reserved! </h1>
+  </section>
+
+  <!-- footer section ends -->
+ 
+
+  <a href="http://localhost:8000/">
+    <img src="static/bot.png" alt="EnigmaBot" class="static-bot" title="HEY! I'm Enigma Bot&#10;Click me to ask any queries">
+</a>
+
+
+    
+
+ 
+
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+  <!-- custom js file link -->
+  <script src="static/script.js"></script>
+
+</body>
+
+</html>

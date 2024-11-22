@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Trends</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+        :root {
+            --orange: #efc550;
+            --bg-color: #0e0c0c;
+            --text-color: #fff;
+            --chart-border: #4bc0c0;
+            --chart-background: rgba(75, 192, 192, 0.2);
+            --chart-bg: #1c1c1c; /* Darker background for the chart */
+            --chart-grid: #2c2c2c; /* Slightly lighter grid lines */
+            --header-bg: #111;
+        }
+
+        * {
+            font-family: 'Nunito', sans-serif;
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            transition: all .2s linear;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+       
+header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #000000;
+    z-index: 1000;
+    display: flex;
+    /* align-items: baseline; */
+    /* justify-content: space-between; */
+    justify-content: space-between; /* Ensure space between logo, navbar, and login button */
+    padding: 0.3rem 9%;
+    max-height: 50%;
+   }
+   
+   header .logo {
+    font-size: 3rem;
+    font-weight: bolder;
+    align-items: baseline;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0.2 cm;
+   }
+   
+   header .logo span {
+    color: var(--orange);
+    font-size: 5rem;
+    margin: 0.2 cm;
+   }
+   
+   header .navbar.items {
+     display: flex;
+     justify-content:left; /* Center the navbar links */
+     align-items:start;
+     flex: 1; /* Allow the navbar to take up remaining space between logo and login button */
+   }
+   header .navbar a {
+    color: #fff;
+    font-size: 1.7rem;
+    margin: 0.8rem; 
+   }
+   
+   header .navbar a:hover {
+    color: var(--orange);
+   }
+   
+   header .icons i {
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.6rem;
+   }
+   
+   /* General button styles */
+   header .login-button-container, 
+   header .logout-button-container {
+     position: relative;
+     display: inline-block;
+     justify-items: end;
+     align-items: baseline;
+   }
+   
+   header .login-button img, 
+   header .logout-button img {
+     display: inline-block;
+     vertical-align: middle;
+     
+   }
+   /* For the login and logout button images */
+   
+   header .logout-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.8); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   /* For the login and logout button images */
+   header .login-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.9); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   
+   
+   /* Tooltip styling */
+   header .login-button .tooltip,
+   header .logout-button .tooltip {
+     position: absolute;
+     top: 100%;
+     left: 50%;
+     transform: translateX(-50%);
+     margin-top: 5px;
+     padding: 5px 10px;
+     background-color: var(--orange);
+     color: black;
+     border-radius: 5px;
+     white-space: nowrap;
+     font-size: 14px;
+     visibility: hidden;
+     opacity: 0;
+     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+     z-index: 1;
+   }
+   
+   /* Show the tooltip on hover */
+   header .login-button:hover .tooltip,
+   header .logout-button:hover .tooltip {
+     visibility: visible;
+     opacity: 1;
+   }
+   
+   /* Additional button styles */
+   header .login-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   header .logout-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   /* Image size adjustments if needed */
+   header .login-button img, 
+   header .logout-button img {
+     width: 40px; /* Adjust as needed */
+     height: 40px; /* Adjust as needed */
+   }
+   
+   header .login-button:hover img, 
+   header .logout-button:hover img {
+     opacity: 0.7; /* Optional hover effect on images */
+   }
+   
+   
+
+        #menu-bar {
+            color: var(--text-color);
+            border: .1rem solid var(--text-color);
+            border-radius: .5rem;
+            font-size: 3rem;
+            padding: .5rem 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        main {
+            padding: 2rem 9%;
+            margin-top: 5rem; /* Adjust for fixed header */
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--text-color);
+        }
+
+        canvas {
+            background-color: var(--chart-bg); /* Darker background for the chart */
+            border: 1px solid var(--orange);
+            border-radius: 8px; /* Add rounded corners for the chart */
+        }
+
+        @media (max-width:1200px) {
+            html {
+                font-size: 55%;
+            }
+        }
+
+        @media (max-width:991px) {
+            header {
+                padding: 2rem;
+            }
+            main {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width:768px) {
+            #menu-bar {
+                display: initial;
+            }
+            header .navbar {
+                position: absolute;
+                top: 100%; right: 0; left: 0;
+                background: #333;
+                border-top: .1rem solid rgba(255, 255, 255, .2);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            }
+
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            header .navbar a {
+                display: block;
+                border-radius: .5rem;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                background: #222;
+            }
+        }
+
+        @media (max-width:450px) {
+            html {
+                font-size: 50%;
+            }
+
+            .heading span {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="bars"></div>
+        <a href="/index" class="logo"><span>E</span>nigma</a>
+        
+        <nav class="navbar">
+            <a href="/index#home">Home</a>
+            <a href="/index#book">Efficiency</a>
+            <a href="/index#portals">Portals</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/index#packages">Blogs</a>
+            <a href="/index#services">Visualizations</a>
+            <a href="/index#review">Review</a>
+            <a href="/index#contact">Contact</a>
+      
+            {% if 'user_id' in session %}
+            <div class="logout-button-container">
+              <a href="/logout" class="logout-button">
+                  <img src="static/login2.png" alt="Logout">
+                  <span class="tooltip">LOGOUT</span>
+              </a>
+          </div>
+      
+          {% else %}
+          <div class="login-button-container">
+            <a href="/login" class="login-button">
+                <img src="static/login.png" alt="Login">
+                <span class="tooltip">LOGIN</span>
+            </a>
+        </div>
+          {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <h1>Login Trends</h1>
+        <canvas id="loginChart" width="800" height="400"></canvas>
+    </main>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const labels = {{ labels | tojson | safe }};
+                const counts = {{ counts | tojson | safe }};
+                const chartType = '{{ chart_type }}';  // 'day', 'month', or 'year' depending on the date range
+                const timeFormat = '{{ time_format }}';  // Time format for displaying the labels
+        
+                const ctx = document.getElementById('loginChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Login Count',
+                            data: counts.map((count, index) => ({ x: labels[index], y: count })),
+                            borderColor: 'var(--chart-border)',
+                            backgroundColor: 'var(--chart-background)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: chartType,  // 'day', 'month', or 'year'
+                                    displayFormats: {
+                                        day: 'MMM D',     // Format for day (e.g., "Sep 8")
+                                        month: 'MMM YYYY',  // Format for month (e.g., "Sep 2024")
+                                        year: 'YYYY'     // Format for year (e.g., "2024")
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Date and Time'
+                                },
+                                ticks: {
+                                    display: true,  // Show ticks based on the chartType
+                                    maxRotation: 45,
+                                    autoSkip: true
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Login Count'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
+        
+    
+    
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+            background-color:black;
+        }
+        h1 {
+            color: #e6b326;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: white;
+            margin-top: 20px;
+        }
+        p {
+            background: black;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 5px;
+            color:white;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #e6b326;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <div class="faq-container">
+        <h1>FAQs</h1>
+        {% for i in range(questions|length) %}
+            <h3>Q: {{ questions[i] }}</h3>
+            <p>A: {{ answers[i]['answer'] }}</p>
+        {% endfor %}
+        <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

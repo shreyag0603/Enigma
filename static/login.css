@@ -1,0 +1,54 @@
+.gradient-custom-2 {
+    background: #fccb90;
+    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    }
+    
+    @media (min-width: 768px) {
+    .gradient-form {
+    height: 100vh !important;
+    }
+    }
+    @media (min-width: 769px) {
+    .gradient-custom-2 {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+    }
+    }
+
+body{
+    background-color: black;    
+}
+
+.card {
+    background-color: rgb(215, 195, 195);
+    border: 1px solid white; /* Optional: Add a border for better visibility */
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bolder;
+    color: #0e0c0c;
+    text-transform: uppercase;
+    margin: 0.2 cm;
+   }
+   
+.logo span {
+    color: #c79818;
+    font-size: 3.5rem;
+    margin: 0.4 cm;
+   }
+   .form-group {
+    position: relative;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px; /* Add spacing below the label */
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 16px;
+}

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .slideshow-container {
+            position: relative;
+            background: #000000f1;
+        }
+        
+        /* Slides */
+        .mySlides {
+            display: none;
+            padding: 80px;
+            text-align: center;
+        }
+        
+        /* Next & previous buttons */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -30px;
+            padding: 16px;
+            color: #888;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+        
+        /* Position the "next button" to the right */
+        .next {
+            position: absolute;
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover, .next:hover {
+            background-color: rgba(190, 179, 179, 0.8);
+            color: white;
+        }
+        
+        /* Add an italic font style to all quotes */
+        q {
+            font-style: italic;
+            color: #f7f2f2;
+            font-size: 2rem; /* Increased the font size */
+        }
+        
+        /* Add a blue color to the author */
+        .author {
+            color: #efc550;
+            font-size: 1.2rem; /* Increased the font size */
+            text-align: right;
+            display: block;
+            margin-top: 1.8rem;
+            position: relative;
+            left: -20px;
+        }
+        
+        :root{
+            --orange: #efc550;
+        }
+
+        header, .navbar {
+            background-color: #000000;
+            box-sizing: border-box;
+            text-transform: capitalize;
+            outline: none; 
+            border: none;
+            text-decoration: none;
+            transition: all .2s linear;
+            font-family: Verdana, sans-serif;
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            padding: 2rem 9%;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            background: var(--orange);
+            color: #fff;
+            padding: .8rem 3rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.7rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 165, 0, .2);
+            color: var(--orange);
+        }
+
+        
+    header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: #000000;
+        z-index: 1000;
+        display: flex;
+        /* align-items: baseline; */
+        /* justify-content: space-between; */
+        justify-content: space-between; /* Ensure space between logo, navbar, and login button */
+        padding: 0.3rem 9%;
+        max-height: 50%;
+    }
+   
+   header .logo {
+    font-size: 3rem;
+    font-weight: bolder;
+    align-items: baseline;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0.2 cm;
+   }
+   
+   header .logo span {
+    color: var(--orange);
+    font-size: 5rem;
+    margin: 0.2 cm;
+   }
+   
+   header .navbar.items {
+     display: flex;
+     justify-content:left; /* Center the navbar links */
+     align-items:start;
+     flex: 1; /* Allow the navbar to take up remaining space between logo and login button */
+   }
+   header .navbar a {
+    color: #fff;
+    font-size: 1.7rem;
+    margin: 0.8rem; 
+   }
+   
+   header .navbar a:hover {
+    color: var(--orange);
+   }
+   
+   header .icons i {
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.6rem;
+   }
+   
+   /* General button styles */
+   header .login-button-container, 
+   header .logout-button-container {
+     position: relative;
+     display: inline-block;
+     justify-items: end;
+     align-items: baseline;
+   }
+   
+   header .login-button img, 
+   header .logout-button img {
+     display: inline-block;
+     vertical-align: middle;
+     
+   }
+   /* For the login and logout button images */
+   
+   header .logout-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.8); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   /* For the login and logout button images */
+   header .login-button img {
+     width: 100%; /* Keep based on its container's width */
+     height: auto; /* Maintain aspect ratio */
+     transform: scale(0.9); /* Reduce size by 10% */
+     transition: transform 0.3s ease-in-out; /* Smooth transition */
+   }
+   
+   
+   /* Tooltip styling */
+   header .login-button .tooltip,
+   header .logout-button .tooltip {
+     position: absolute;
+     top: 100%;
+     left: 50%;
+     transform: translateX(-50%);
+     margin-top: 5px;
+     padding: 5px 10px;
+     background-color: var(--orange);
+     color: black;
+     border-radius: 5px;
+     white-space: nowrap;
+     font-size: 14px;
+     visibility: hidden;
+     opacity: 0;
+     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+     z-index: 1;
+   }
+   
+   /* Show the tooltip on hover */
+   header .login-button:hover .tooltip,
+   header .logout-button:hover .tooltip {
+     visibility: visible;
+     opacity: 1;
+   }
+   
+   /* Additional button styles */
+   header .login-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   header .logout-button {
+     font-size: 0.7rem;
+     cursor: pointer;
+     text-decoration: none;
+   }
+   
+   /* Image size adjustments if needed */
+   header .login-button img, 
+   header .logout-button img {
+     width: 40px; /* Adjust as needed */
+     height: 40px; /* Adjust as needed */
+   }
+   
+   header .login-button:hover img, 
+   header .logout-button:hover img {
+     opacity: 0.7; /* Optional hover effect on images */
+   }
+   
+   
+
+        #menu-bar {
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            font-size: 3rem;
+            padding: .5rem 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        @media (max-width:1200px) {
+            html{
+                font-size: 55%;
+            }
+        }
+
+        @media (max-width:991px) {
+            header{
+                padding: 2rem;
+            }
+            section{
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width:768px) {
+        
+            #menu-bar{
+                display: initial;
+            }
+            header .navbar {
+                position: absolute;
+                top: 100%; right: 0;left: 0;
+                background: #333;
+                border-top: .1rem solid rgba(255,255,255,.2);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            }
+
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            header .navbar a {
+                display: block;
+                border-radius: .5rem;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                background: #222;
+            }
+        }
+
+        @media (max-width:450px) {
+
+            html{
+                font-size: 50%;
+            }
+
+            .heading span {
+                font-size: 2.5rem;
+            }
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-start;
+            background-color: #000000;
+            padding: 1rem;
+        }
+        
+        .row .image {
+            flex: 1 1 45%;
+            min-width: 300px;
+            height:450px;
+        }
+        
+        .row .image img {
+            width:80%;
+            height: 100%;
+            border-radius: 0.5rem;
+            margin-top: -6px;
+            margin-left:50px;
+        }
+        
+        .row form {
+            flex: 1 1 45%;
+            padding: 2rem;
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            background-color: #222;
+            min-width: 300px;
+        }
+        
+        .row form .inputBox {
+            margin-bottom: 1rem;
+        }
+        
+        .row form .inputBox h3 {
+            font-size: 1.2rem;
+            color: #bbb;
+            margin-bottom: 0.5rem;
+        }
+        
+        .row form .inputBox select,
+        .row form .inputBox input {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            box-sizing: border-box;
+        }
+        
+        .row form .inputBox .next-btn {
+            background-color: #28a745;
+            color: white;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            border: none;
+            width: calc(100% - 10px);
+            margin: 1rem 10px 0 10px;
+        }
+        
+        .row form .inputBox .prev-btn,
+        .row form .inputBox input[type="submit"] {
+            font-size: 1.2rem;
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            border: none;
+            width: 48%;
+        }
+
+        .row form .inputBox .prev-btn {
+            background-color: #dc3545;
+            color: white;
+            margin-right: 4%;
+
+        }
+
+        .row form .inputBox input[type="submit"] {
+            background-color: #efc550;
+            color: white;
+        }
+        
+        /* Hide all steps except the first one */
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        header  a {
+            color: #fff;
+            font-size: 1.7rem;
+            margin: 0.8rem;
+            text-decoration: none; /* Add this line to remove the underline */
+        }
+        
+        header  a:hover {
+            color: var(--orange);
+            text-decoration: none; /* Ensure the underline is not added back on hover */
+        }
+        
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .row .image,
+            .row form {
+                flex: 1 1 100%;
+                max-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="bars"></div>
+        
+        <a href="/index" class="logo"><span>E</span>nigma</a>
+        
+        <nav class="navbar">
+            <a href="/index#home">Home</a>
+            <a href="/index#book">Efficiency</a>
+            <a href="/index#portals">Portals</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/index#packages">Blogs</a>
+            <a href="/index#services">Visualizations</a>
+            <a href="/index#review">Review</a>
+            <a href="/index#contact">Contact</a>
+      
+            {% if 'user_id' in session %}
+            <div class="logout-button-container">
+              <a href="/logout" class="logout-button">
+                  <img src="static/login2.png" alt="Logout">
+                  <span class="tooltip">LOGOUT</span>
+              </a>
+          </div>
+      
+          {% else %}
+          <div class="login-button-container">
+            <a href="/login" class="login-button">
+                <img src="static/login.png" alt="Login">
+                <span class="tooltip">LOGIN</span>
+            </a>
+        </div>
+          {% endif %}
+        </nav>
+        <link rel="icon" type="image/png" href="static/icon.png">
+    </header>
+    <br><br><br><br><br>
+
+    <div class="slideshow-container">
+        <div class="mySlides">
+            <q>Climate change is real. It is the most urgent threat facing our entire species, and we need to work collectively and stop procrastinating.</q>
+            <p class="author">- Leonardo DiCaprio</p>
+        </div>
+        
+        <div class="mySlides">
+            <q>The climate crisis is not a political issue, it is a moral and spiritual challenge to all of humanity.</q>
+            <p class="author">- Al Gore</p>
+        </div>
+        
+        <div class="mySlides">
+            <q>The climate change challenge is the single most important issue facing our generation.</q>
+            <p class="author">- Ban Ki-moon</p>
+        </div>
+        
+        <!-- Next and previous buttons -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    
+    <div class="row">
+        <div class="image">
+            <img src="static/cfp3.png" alt="Image">
+        </div>
+        <form action="/predict1" id="multiStepForm" method="POST">
+            <!-- Step 1 -->
+            <div class="step active">
+                <div class="inputBox">
+                    <h3>Body Type</h3>
+                    <select id="Body Type" name="Body Type">
+                        <option value="overweight">Overweight</option>
+                        <option value="obese">Obese</option>
+                        <option value="underweight">Underweight</option>
+                        <option value="normal">Normal</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Gender</h3>
+                    <select id="Sex" name="Sex">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other/option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Diet</h3>
+                    <select id="Diet" name="Diet">
+                        <option value="pescatarian">Pescatarian</option>
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="omnivore">Omnivore</option>
+                        <option value="vegan">Vegan</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>How Often Shower</h3>
+                    <select id="How Often Shower" name="How Often Shower">
+                        <option value="daily">Daily</option>
+                        <option value="less frequently">Less Frequently</option>
+                        <option value="more frequently">More Frequently</option>
+                        <option value="twice a day">Twice a Day</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Heating Energy Source</h3>
+                    <select id="Heating Energy Source" name="Heating Energy Source">
+                        <option value="coal">Coal</option>
+                        <option value="natural gas">Natural Gas</option>
+                        <option value="wood">Wood</option>
+                        <option value="electricity">Electricity</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <button type="button" class="next-btn" style="width: calc(100% + 3px); margin-left: -3px;">Next</button>
+                </div>
+                
+        
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="step">
+                <div class="inputBox">
+                    <h3>Transport</h3>
+                    <select id="Transport" name="Transport">
+                        <option value="public">Public</option>
+                        <option value="walk/bicycle">Walk/Bicycle</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Vehicle Type</h3>
+                    <select id="Vehicle Type" name="Vehicle Type">
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="lpg">LPG</option>
+                        <option value="electric">Electric</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Frequency of Traveling by Air</h3>
+                    <select id="Frequency of Traveling by Air" name="Frequency of Traveling by Air">
+                        <option value="frequently">Frequently</option>
+                        <option value="rarely">Rarely</option>
+                        <option value="never">Never</option>
+                        <option value="very frequently">Very Frequently</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Using Energy Efficient Devices?</h3>
+                    <select id="Energy efficiency" name="Energy efficiency">
+                        <option value="No">No</option>
+                        <option value="Sometimes">Sometimes</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div class="inputBox">
+                    <h3>Cooking With</h3>
+                    <select id="Cooking_With" name="Cooking_With">
+                        <option value="stove">Stove</option>
+                        <option value="oven">Oven</option>
+                        <option value="microwave">Microwave</option>
+                        <option value="grill">Grill</option>
+                        <option value="airfryer">Airfryer</option>
+                        <option value="stove,oven">Stove, Oven</option>
+                        <option value="stove,microwave">Stove, Microwave</option>
+                        <option value="oven,microwave">Oven, Microwave</option>
+                        <option value="microwave,grill,airfryer">Microwave, Grill, Airfryer</option>
+                        <option value="oven">Oven</option>
+                        <option value="stove,oven,microwave">Stove, Oven, Microwave</option>
+                        <option value="grill,airfryer">Grill, Airfryer</option>
+                        <option value="stove">Stove</option>
+                        <option value="stove,oven,microwave,grill,airfryer">Stove, Oven, Microwave, Grill, Airfryer</option>
+                        <option value="oven,microwave,grill,airfryer">Oven, Microwave, Grill, Airfryer</option>
+                        <option value="stove,grill,airfryer">Stove, Grill, Airfryer</option>
+                        <option value="oven,grill,airfryer">Oven, Grill, Airfryer</option>
+                        <option value="microwave">Microwave</option>
+                        <option value="stove,oven,grill,airfryer">Stove, Oven, Grill, Airfryer</option>
+                        <option value="stove,microwave,grill,airfryer">Stove, Microwave, Grill, Airfryer</option>
+                    </select>
+                </div>
+                <div class="inputBox" style="display: flex; justify-content: space-between;">
+                    <button type="button" class="prev-btn" style="width: 48%; padding: 1.2rem; font-size: 1.4rem; margin-top: 17px;">Prev</button>
+                    <button type="button" class="next-btn" style="width: 48%; padding: 1.2rem; font-size: 1.4rem; margin-top: 19px;">Next</button>
+                </div>
+                
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="step">
+                <div class="inputBox">
+                    <h3>Vehicle Monthly Distance (Km)</h3>
+                    <input type="number" id="Vehicle Monthly Distance Km" placeholder="Enter vehicle distance in Km" min="0" step="0.01">
+                </div>
+                <div class="inputBox">
+                    <h3>Waste Bag Weekly Count</h3>
+                    <input type="number" id="Waste Bag Weekly Count" placeholder="Enter number of waste bags per week" min="0" step="1">
+                </div>
+                <div class="inputBox">
+                    <h3>How Long TV/PC Daily (Hour)</h3>
+                    <input type="number" id="How Long TV PC Daily Hour" placeholder="Enter usage hours per day" min="0" max="24" step="0.01">
+                </div>
+                <div class="inputBox">
+                    <h3>How Long Internet Daily (Hour)</h3>
+                    <input type="number" id="How Long Internet Daily Hour" placeholder="Enter internet usage hours per day" min="0" max="24" step="0.01">
+                </div>
+                <br><br><br><br><br><br><br>
+                <div class="inputBox" style="display: flex; justify-content: space-between;">
+                  
+                    <button type="button" class="prev-btn" style="width: 50%; padding: 1.2rem; font-size: 1.4rem;">Prev</button>
+                    <input type="submit" value="Submit" style="width: 50%; padding: 1.2rem; font-size: 1.4rem;">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const steps = document.querySelectorAll('.step');
+        const nextBtns = document.querySelectorAll('.next-btn');
+        const prevBtns = document.querySelectorAll('.prev-btn');
+        let currentStep = 0;
+
+        // Show the current step
+        function showStep(stepIndex) {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index === stepIndex);
+            });
+        }
+
+        // Go to the next step
+        nextBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                currentStep++;
+                if (currentStep >= steps.length) {
+                    currentStep = steps.length - 1;
+                }
+                showStep(currentStep);
+            });
+        });
+
+        // Go to the previous step
+        prevBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                currentStep--;
+                if (currentStep < 0) {
+                    currentStep = 0;
+                }
+                showStep(currentStep);
+            });
+        });
+
+        // Initialize the form with the first step visible
+        showStep(currentStep);
+        var slideIndex = 0;
+        showSlides();
+        
+        function plusSlides(n) {
+            slideIndex += n;
+            showSlides();
+        }
+        
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            if (slideIndex >= slides.length) { slideIndex = 0 }
+            if (slideIndex < 0) { slideIndex = slides.length - 1 }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex].style.display = "block";
+        }
+        
+        setInterval(function() {
+            plusSlides(1);
+        }, 3000); // Change slide every 3 seconds
+    </script>
+</body>
+</html>

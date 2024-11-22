@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #e6b326;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: auto;
+            text-align: center;
+            border: 2px solid #007bff;
+        }
+
+        .section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        select, button {
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            text-align: left;
+        }
+
+        li {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 500px;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        /* New CSS for reduced graph size */
+        .small-image {
+            max-width: 50%;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h2 class="section-title">PREDICTION:</h2>
+            <p>{{ result }}</p>
+            <p>{{ efficiency_rating }}</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">RECOMMENDATIONS:</h2>
+            <ul>
+                {% for recommendation in recommendations %}
+                    <li>{{ recommendation }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">COOLING SYSTEM:</h2>
+            <p>Choose your preferred way of cooling:</p>
+            {% if show_analysis %}
+                <form action="{{ url_for('analyze') }}" method="post">
+                    <input type="hidden" name="pp_type" value="{{ pp_type }}">
+                    <input type="hidden" name="predicted_energy" value="{{ predicted_energy }}">
+
+                    <label for="analysis_choice">Choose Analysis Type:</label>
+                    <select id="analysis_choice" name="analysis_choice" required>
+                        <option value="1">Overall Comparison</option>
+                        <option value="2">Machine Efficient</option>
+                        <option value="3">Environment Efficient</option>
+                        <option value="4">Minimalistic Water Usage</option>
+                    </select>
+                    <br><br>
+
+                    <button type="submit">Submit</button>
+                </form>
+            {% endif %}
+
+            {% if images %}
+                <h2>Graphs:</h2>
+                {% for image in images %}
+                    {% if analysis_choice == '1' %}
+                        <!-- Reduced graph size for "Overall Comparison" -->
+                        <img src="{{ image }}" alt="Graph" class="small-image">
+                    {% else %}
+                        <!-- Regular graph size for other analyses -->
+                        <img src="{{ image }}" alt="Graph">
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if results %}
+                <h2>Analysis Results:</h2>
+                <ul>
+                    {% for result in results %}
+                        <li>{{ result }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

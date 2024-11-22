@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Energy Hub</title>
+
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+        :root{
+            --orange: #dda712;
+        }
+
+        * {
+            font-family: 'Nunito', sans-serif;
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            
+            outline: none; border: none;
+            text-decoration: none;
+            transition: all .2s linear;
+            background-color: #000000;
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            padding: 2rem 9%;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            background: var(--orange);
+            color: #fff;
+            padding: .8rem 3rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.7rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 165, 0, .2);
+            color: var(--orange);
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: #000000;
+            z-index: 2000;
+            display: flex;
+            align-items: first baseline;
+            justify-content: space-between;
+            padding: 0.3rem 9%;
+            max-height: 50%;
+        }
+        
+           
+           header .logo {
+            font-size: 3rem;
+            font-weight: bolder;
+            align-items: baseline;
+            color: #fff;
+            text-transform: uppercase;
+            margin: 0.2 cm;
+           }
+           
+           header .logo span {
+            color: var(--orange);
+            font-size: 5rem;
+            margin: 0.2 cm;
+           }
+           
+           header .navbar.items {
+             display: flex;
+             justify-content:left; /* Center the navbar links */
+             align-items:start;
+             flex: 1; /* Allow the navbar to take up remaining space between logo and login button */
+           }
+           header .navbar a {
+            color: #fff;
+            font-size: 1.7rem;
+            margin: 0.8rem; 
+           }
+           
+           header .navbar a:hover {
+            color: var(--orange);
+           }
+           
+           header .icons i {
+            font-size: 2.5rem;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 0.6rem;
+           }
+           
+           /* General button styles */
+           header .login-button-container, 
+           header .logout-button-container {
+             position: relative;
+             display: inline-block;
+             justify-items: end;
+             align-items: baseline;
+           }
+           
+           header .login-button img, 
+           header .logout-button img {
+             display: inline-block;
+             vertical-align: middle;
+             
+           }
+           /* For the login and logout button images */
+           
+           header .logout-button img {
+             width: 100%; /* Keep based on its container's width */
+             height: auto; /* Maintain aspect ratio */
+             transform: scale(0.8); /* Reduce size by 10% */
+             transition: transform 0.3s ease-in-out; /* Smooth transition */
+           }
+           /* For the login and logout button images */
+           header .login-button img {
+             width: 100%; /* Keep based on its container's width */
+             height: auto; /* Maintain aspect ratio */
+             transform: scale(0.9); /* Reduce size by 10% */
+             transition: transform 0.3s ease-in-out; /* Smooth transition */
+           }
+           
+           
+           /* Tooltip styling */
+           header .login-button .tooltip,
+           header .logout-button .tooltip {
+             position: absolute;
+             top: 100%;
+             left: 50%;
+             transform: translateX(-50%);
+             margin-top: 5px;
+             padding: 5px 10px;
+             background-color: var(--orange);
+             color: black;
+             border-radius: 5px;
+             white-space: nowrap;
+             font-size: 14px;
+             visibility: hidden;
+             opacity: 0;
+             transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+             z-index: 1;
+           }
+           
+           /* Show the tooltip on hover */
+           header .login-button:hover .tooltip,
+           header .logout-button:hover .tooltip {
+             visibility: visible;
+             opacity: 1;
+           }
+           
+           /* Additional button styles */
+           header .login-button {
+             font-size: 0.7rem;
+             cursor: pointer;
+             text-decoration: none;
+           }
+           
+           header .logout-button {
+             font-size: 0.7rem;
+             cursor: pointer;
+             text-decoration: none;
+           }
+           
+           /* Image size adjustments if needed */
+           header .login-button img, 
+           header .logout-button img {
+             width: 40px; /* Adjust as needed */
+             height: 40px; /* Adjust as needed */
+           }
+           
+           header .login-button:hover img, 
+           header .logout-button:hover img {
+             opacity: 0.7; /* Optional hover effect on images */
+           }
+           
+       
+
+     
+
+      
+
+
+        #menu-bar {
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            font-size: 3rem;
+            padding: .5rem 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+        .hidden-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #f0eeee;
+        }
+        @media (max-width:1200px) {
+            html{
+                font-size: 55%;
+            }
+        }
+
+        @media (max-width:991px) {
+            header{
+                padding: 2rem;
+            }
+            section{
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width:768px) {
+            #menu-bar{
+                display: initial;
+            }
+            header .navbar {
+                position: absolute;
+                top: 100%; right: 0;left: 0;
+                background: #333;
+                border-top: .1rem solid rgba(255,255,255,.2);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            }
+
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            header .navbar a {
+                display: block;
+                border-radius: .5rem;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                background: #222;
+            }
+        }
+
+        @media (max-width:450px) {
+            html{
+                font-size: 50%;
+            }
+            .heading span {
+                font-size: 2.5rem;
+            }  
+        }
+
+       /* Styling for the sidebar */
+       .sidebar {
+        font-size: small;
+        width: 250px; /* Adjust width as needed */
+        background-color: #000; /* Black background */
+        color: #fff; /* White text color for contrast */
+        position: fixed; /* Fix the sidebar to the left */
+        top: 0; /* Align to the top */
+        left: 0; /* Align to the left */
+        height: 100%; /* Full height of the viewport */
+        overflow-y: auto; /* Enable vertical scrolling if needed */
+        padding: 2rem; /* Add padding inside the sidebar */
+        box-shadow: 2px 0 5px rgba(0,0,0,0.5); /* Optional: Add shadow for better visibility */
+        z-index: 1000; /* Ensure it's below the header */
+      }
+      
+
+      
+      /* Adjust main content area to account for sidebar */
+      .content {
+        margin-left: 250px; /* Space for the sidebar */
+        padding: 2rem; /* Add padding to the content */
+        margin-top: 100px; /* Space for the header */
+        background-color: #000000; /* Background color for content */
+        color: #fff; /* Ensure text color is white */
+        border: none; /* Remove any border */
+    }
+    
+      
+      /* Optional: Styling for sidebar links */
+      .sidebar a {
+        color: #fff; /* White text color */
+        text-decoration: none; /* Remove underline */
+        display: block; /* Make links block-level */
+        padding: 1rem; /* Add padding around links */
+        border-bottom: 1px solid rgba(255,255,255,0.2); /* Optional: Add a bottom border */
+      }
+      
+      .sidebar a:hover {
+        background-color: #333; /* Change background on hover */
+      }
+      h2 {
+        font-size: 2.5rem; /* Adjust the size as needed */
+        font-weight: bold;
+        margin-bottom: 1rem; /* Add some space below the heading */
+    }
+    p {
+        text-indent: 3.5em; /* Indents the first line of each paragraph */
+        margin-bottom: 1.5em; /* Adds space below each paragraph */
+    }
+    .full-width-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: white;
+        background-color: var(--orange);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+    .full-width-button:hover {
+        background-color: #a7700b;
+    }
+    .question {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #fff8f8;
+        
+    }
+    .answer-button {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        color: #857809;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        padding: 0;
+    }
+    .answer-button:hover {
+        text-decoration: underline;
+    }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <header>
+
+        <div id="menu-bar" class="bars"></div>
+    
+        <a href="/index" class="logo"><span>E</span>nigma</a>
+        
+        <nav class="navbar">
+            <a href="/index">Home</a>
+            <a href="/index#book">Efficiency</a>
+            <a href="/index#portals">Portals</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/index#services">Visualizations</a>
+            <a href="/index#packages">Blogs</a>
+            <a href="/index#review">Review</a>
+            <a href="/index#contact">Contact</a>    
+            {% if 'user_id' in session %}
+            <div class="logout-button-container">
+              <a href="/logout" class="logout-button">
+                  <img src="static/login2.png" alt="Logout">
+                  <span class="tooltip">LOGOUT</span>
+              </a>
+          </div>
+      
+          {% else %}
+          <div class="login-button-container">
+            <a href="/login" class="login-button">
+                <img src="static/login.png" alt="Login">
+                <span class="tooltip">LOGIN</span>
+            </a>
+        </div>
+          {% endif %}      
+        </nav>
+    
+        <link rel="icon" type="image/png" href="static/icon.png">   
+    </header>
+    
+    <br><br>
+    <div class="sidebar">
+        <br><br><br><br>
+        <h1>CONTENT</h1>
+        <br>
+        <a href="#climate-change-impacts">Climate Change Impacts</a>
+        <a href="#global-temperature-rise">Global Temperature Rise</a>
+        <a href="#warming-ocean">Warming Ocean</a>
+        <a href="#shrinking-ice-sheets">Shrinking Ice Sheets</a>
+        <a href="#glacial-retreat">Glacial Retreat</a>
+        <a href="#decreased-snow-cover">Decreased Snow Cover</a>
+        <a href="#sea-level-rise">Sea Level Rise</a>
+        <a href="#declining-arctic-sea-ice">Declining Arctic Sea Ice</a>
+        <a href="#extreme-events">Extreme Events</a>
+        <a href="#ocean-acidification">Ocean Acidification</a>
+    </div>
+
+    <div class="content">
+        <div id="climate-change-impacts">
+            <h2 style="font-size:xx-large; color:#efc550;text-align: center;">CLIMATE CHANGE IMPACTS</h2><br>
+            <p style="color: #fff; font-size:medium;">
+                Climate change is affecting every part of the globe in diverse and far-reaching ways. Rising temperatures are causing more frequent and severe weather events, altering ecosystems, and impacting human societies. The interplay between various climate factors is leading to unpredictable and often devastating effects on natural systems and human infrastructure. These changes are causing shifts in weather patterns, which result in increased intensity and frequency of storms, droughts, and heatwaves. Addressing these challenges requires a multifaceted approach involving global cooperation and innovative solutions.
+            </p>
+           
+            <p style="color: #fff; font-size:medium;">
+                Among the significant impacts are shifts in weather patterns, which result in increased intensity and frequency of storms, droughts, and heatwaves. These changes have cascading effects on agriculture, water resources, and biodiversity. For instance, the increased frequency of extreme weather events affects crop yields and water availability, leading to food insecurity in vulnerable regions. The strain on natural resources and ecosystems is becoming more apparent, and the impacts are increasingly visible in both developed and developing countries. To mitigate these effects, it's essential to adopt sustainable practices and invest in resilient infrastructure.
+            </p>
+        </div>
+        
+        <div id="global-temperature-rise">
+            <h2>Global Temperature Rise</h2>
+            <p style="color: #fff; font-size:medium;">
+                Global temperature rise is one of the most visible signs of climate change. Over the past century, average global temperatures have increased significantly due to the buildup of greenhouse gases in the atmosphere. This warming is driving numerous changes in the climate system, including more extreme weather patterns and disruptions to ecosystems. The increase in temperature is also contributing to the accelerated melting of polar ice, which has serious implications for sea levels. Efforts to combat this rise involve reducing carbon emissions and transitioning to renewable energy sources.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The rise in global temperatures has implications for sea levels, weather patterns, and ecosystems. It exacerbates the melting of polar ice, leading to rising sea levels that threaten coastal communities and habitats. Warmer temperatures also affect weather patterns, causing more intense and frequent storms and altering precipitation patterns. This has cascading effects on agriculture, water supplies, and biodiversity. To mitigate these effects, it's crucial to reduce greenhouse gas emissions and transition to sustainable energy sources.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Addressing global temperature rise requires comprehensive strategies that involve international cooperation and policy changes. Governments and organizations must implement measures to limit emissions and promote energy efficiency. Public awareness and education on climate change are also important in driving collective action. Additionally, investment in renewable energy technologies and green infrastructure can help reduce the reliance on fossil fuels and curb temperature increases. Collaborative efforts are essential to achieving long-term climate goals and ensuring a sustainable future.
+            </p>
+        </div>
+        
+        <div id="warming-ocean">
+            <h2>Warming Ocean</h2>
+            <p style="color: #fff; font-size:medium;">
+                The warming of the ocean is a direct consequence of increased global temperatures. Oceans absorb much of the excess heat from climate change, leading to rising sea temperatures. This warming affects marine life, causing coral bleaching, shifting fish populations, and altering marine ecosystems. The impact on oceanic health is profound, with many species struggling to adapt to the changing conditions. Coral reefs, in particular, are highly sensitive to temperature changes and face severe threats from bleaching events.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Warming oceans also contribute to the melting of polar ice caps and glaciers, further accelerating sea level rise. The increased temperature can disrupt ocean circulation patterns, which has implications for global weather systems. Additionally, warmer seas can lead to more intense and frequent tropical storms and hurricanes. These changes pose significant risks to coastal communities and marine biodiversity. To address ocean warming, it's essential to reduce carbon emissions and implement measures to protect marine environments.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Addressing the warming of the ocean involves international cooperation and concerted efforts to mitigate climate change. Reducing greenhouse gas emissions is crucial in slowing down ocean warming and its associated impacts. Protecting marine ecosystems through conservation efforts and sustainable practices can help improve the resilience of marine life. Continued research and monitoring are necessary to understand the full extent of ocean warming and to develop strategies for adaptation. Ensuring the health of ocean ecosystems is vital for maintaining global biodiversity and ecosystem services.
+            </p>
+        </div>
+        
+        <div id="shrinking-ice-sheets">
+            <h2>Shrinking Ice Sheets</h2>
+            <p style="color: #fff; font-size:medium;">
+                Ice sheets are massive bodies of ice that cover significant portions of the Earth's surface, primarily in Greenland and Antarctica. The ongoing warming of the planet has led to the accelerated melting of these ice sheets. This melting contributes to rising sea levels and disrupts global climate patterns. The loss of ice sheets has implications for freshwater availability, as ice sheets store a substantial portion of the Earth's freshwater. As they melt, this freshwater flows into the oceans, exacerbating sea level rise.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The loss of ice sheets also impacts sea ice formation and global climate. As ice sheets shrink, they release freshwater into the ocean, which can disrupt ocean circulation patterns and affect weather systems globally. This disruption can lead to changes in regional climates and weather patterns, impacting agriculture and ecosystems. Efforts to mitigate the impacts of shrinking ice sheets involve reducing greenhouse gas emissions and enhancing climate resilience. Strategies to address the issue include improving climate models and investing in technologies to monitor ice sheet changes.
+            </p>
+        </div>
+        
+        <div id="glacial-retreat">
+            <h2>Glacial Retreat</h2>
+            <p style="color: #fff; font-size:medium;">
+                Glacial retreat is a phenomenon where glaciers are shrinking and receding due to rising temperatures. This retreat is a clear indicator of global warming and has significant implications for water resources, sea level rise, and local ecosystems. As glaciers retreat, they contribute to the loss of freshwater sources for millions of people worldwide. The reduction in glacial ice also affects river flow patterns, which can impact agriculture and water supply in regions dependent on glacial meltwater.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The melting of glaciers also affects sea levels, as the water previously stored in glaciers flows into the ocean. This contributes to rising sea levels, which can threaten coastal communities and habitats. Additionally, glacial retreat can impact local climates and ecosystems, leading to changes in vegetation and wildlife habitats. The effects of glacial retreat are complex and require a global effort to address. Reducing greenhouse gas emissions and promoting sustainable land use practices are essential to mitigating these impacts.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Mitigating the impacts of glacial retreat involves both adaptation and mitigation strategies. Communities that rely on glacial meltwater need to develop alternative water sources and improve water management practices. Conservation efforts to protect remaining glaciers and support climate resilience are crucial. International cooperation is necessary to address the global nature of climate change and its effects on glaciers. Continued research and monitoring of glacier health can help inform strategies to adapt to and mitigate the impacts of glacial retreat.
+            </p>
+        </div>
+        
+        <div id="decreased-snow-cover">
+            <h2>Decreased Snow Cover</h2>
+            <p style="color: #fff; font-size:medium;">
+                Decreased snow cover is another consequence of global warming, as rising temperatures lead to reduced snowfall and earlier snowmelt. This reduction in snow cover affects water resources, as many regions rely on snowmelt for their water supply. It also impacts ecosystems that depend on snow-covered landscapes for survival. Snow cover plays a crucial role in regulating temperatures and maintaining seasonal weather patterns.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The loss of snow cover contributes to higher temperatures, as snow reflects sunlight, while bare ground absorbs heat. This feedback loop exacerbates global warming and can lead to further reductions in snow cover. Changes in snow cover can affect winter sports and tourism industries, which rely on consistent snow conditions. Addressing this issue involves reducing emissions and implementing measures to adapt to changing snow conditions.
+            </p>
+        </div>
+        
+        <div id="sea-level-rise">
+            <h2>Sea Level Rise</h2>
+            <p style="color: #fff; font-size:medium;">
+                Sea level rise is a significant consequence of global warming, driven by the melting of ice sheets and glaciers, as well as thermal expansion of seawater. Rising sea levels pose a threat to coastal communities, ecosystems, and infrastructure. Coastal areas face increased risks of flooding, erosion, and saltwater intrusion. These impacts can lead to the displacement of populations and loss of property and livelihoods.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The impact of sea level rise requires adaptation strategies such as building sea walls, restoring wetlands, and implementing managed retreat plans. Coastal cities and communities need to develop resilience plans to cope with the effects of rising sea levels. Reducing greenhouse gas emissions is also crucial to mitigate future sea level rise and protect vulnerable coastal regions from the impacts of climate change. Continued research and monitoring are essential to understanding and preparing for the challenges posed by sea level rise.
+            </p>
+        </div>
+        
+        <div id="declining-arctic-sea-ice">
+            <h2>Declining Arctic Sea Ice</h2>
+            <p style="color: #fff; font-size:medium;">
+                Declining Arctic sea ice is a prominent indicator of climate change, with substantial reductions in ice extent and thickness observed in recent decades. This decline affects Arctic ecosystems, wildlife, and global climate patterns. The loss of sea ice contributes to further warming as the reflective ice surface is replaced by heat-absorbing ocean water. This change accelerates the melting of polar ice and impacts global weather systems.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The reduction in sea ice impacts species such as polar bears and seals, which rely on ice for hunting and breeding. It also influences weather patterns and ocean circulation, with potential consequences for global climate. The loss of sea ice can lead to changes in ocean currents and weather patterns, affecting regions far from the Arctic. Addressing this issue involves reducing emissions and protecting Arctic environments.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Protecting Arctic environments requires international cooperation and commitment to climate action. Conservation efforts to preserve remaining sea ice and support Arctic wildlife are essential. Sustainable practices and policies can help mitigate the impacts of sea ice loss and promote environmental stewardship. Continued research and monitoring are necessary to understand the full extent of sea ice changes and their implications for global climate systems.
+            </p>
+        </div>
+        
+        <div id="extreme-events">
+            <h2>Extreme Events</h2>
+            <p style="color: #fff; font-size:medium;">
+                Extreme weather events, including heatwaves, hurricanes, and heavy rainfall, have become more frequent and intense due to climate change. These events have severe impacts on human health, infrastructure, and natural systems. The increased occurrence of extreme events is a clear signal of the changing climate and its effects. Heatwaves can lead to health crises and strain energy resources, while hurricanes and heavy rainfall can cause widespread damage and flooding.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Addressing the impacts of extreme events requires improved forecasting, disaster preparedness, and adaptation strategies. Strengthening infrastructure and building resilience in communities can help mitigate the effects of these events. Enhanced early warning systems and emergency response plans are crucial for minimizing damage and protecting lives. Reducing greenhouse gas emissions is also essential to prevent further intensification of extreme weather.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Global cooperation and investment in climate resilience are key to addressing the challenges posed by extreme events. Governments, organizations, and communities must work together to implement effective adaptation strategies and support vulnerable populations. Continued research and innovation can help develop new technologies and approaches to manage and mitigate the impacts of extreme weather. Building a resilient future requires a collective effort to address the root causes of climate change and its effects on extreme events.
+            </p>
+        </div>
+        
+        <div id="ocean-acidification">
+            <h2>Ocean Acidification</h2>
+            <p style="color: #fff; font-size:medium;">
+                Ocean acidification refers to the decrease in ocean pH levels due to the absorption of excess carbon dioxide from the atmosphere. This change in acidity affects marine life, particularly organisms with calcium carbonate shells or skeletons, such as corals and shellfish. Ocean acidification disrupts marine ecosystems and food webs, leading to significant ecological and economic impacts. The decreased availability of calcium carbonate affects the ability of marine organisms to build and maintain their shells and skeletons.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The impact of ocean acidification on marine biodiversity and fisheries is a growing concern. Coral reefs, which provide habitat for a diverse range of marine species, are particularly vulnerable to acidification. The decline in coral reefs can affect fish populations and the livelihoods of communities dependent on fishing. Addressing ocean acidification involves reducing carbon emissions and protecting marine environments through conservation efforts and sustainable practices.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                Continued research and monitoring are crucial to understanding and mitigating the effects of ocean acidification on marine ecosystems. International cooperation and policy measures are necessary to address the global nature of this issue. Enhancing our understanding of ocean chemistry and its impacts on marine life can help develop effective strategies for adaptation and mitigation. Protecting the health of ocean ecosystems is vital for ensuring the sustainability of marine resources and the well-being of coastal communities.
+            </p>
+        </div>
+        
+        <form action="{{ url_for('generate_summary') }}" method="post">
+            <input type="hidden" name="blog_file" value="blog1.txt">
+            <button type="submit" class="full-width-button">Summarize the Aricle</button>
+        </form>
+
+        <form action="{{ url_for('generate_faq') }}" method="post">
+            <input type="hidden" name="blog_file" value="blog1.txt">
+            <button type="submit" class="full-width-button">Frequently Asked Questions</button>
+        </form>
+        <div id="questions-container"></div>
+       
+    </div>   
+   
+</body>
+</html>

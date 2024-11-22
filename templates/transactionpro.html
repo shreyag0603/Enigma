@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn:disabled {
+            background-color: #ddd;
+        }
+
+        .otp-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .otp-section input {
+            width: 50%;
+        }
+
+        #submitBtn {
+            margin-top: 20px; /* Added margin to move the button down */
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <header>
+        <div id="menu-bar" class="bars">
+            <p><span>E</span>NIGMA - Pro Plan</p>
+        </div>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+        
+        <h2>Payment Portal</h2>
+        <form id="transactionForm" action="/process_transaction_pro" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" 
+                       value="{{ session.get('email', '') }}" 
+                       placeholder="Enter your email address" 
+                       required 
+                       pattern="^[^@]+@[^@]+\.[a-zA-Z]{2,}$" 
+                       title="Email must contain '@' and a '.' after the '@'">
+            </div>
+
+            <div class="form-group">
+                <label for="cardholder_name">Cardholder Name</label>
+                <input type="text" id="cardholder_name" name="cardholder_name" class="form-control" 
+                       placeholder="Enter cardholder's name" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="cardnumber">Card Number</label>
+                <input type="text" id="cardnumber" name="cardnumber" class="form-control" 
+                       placeholder="Enter your card number" 
+                       required 
+                       pattern="\d{16}" 
+                       title="Card number must be exactly 16 digits">
+            </div>
+
+            <div class="form-group">
+                <label for="expiry_date">Expiry Date</label>
+                <input type="month" id="expiry_date" name="expiry_date" class="form-control" 
+                       placeholder="MM/YY" 
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="password" id="cvv" name="cvv" class="form-control" 
+                       placeholder="Enter CVV" 
+                       maxlength="3" 
+                       required 
+                       pattern="\d{3}" 
+                       title="CVV must be exactly 3 digits">
+            </div>
+           
+            <button type="button" id="generateOtpBtn" class="btn">Generate OTP</button>
+
+            <div class="otp-section">
+                <div class="form-group">
+                    <label for="otp">Enter OTP</label>
+                    <input type="text" id="otp" class="form-control">
+                </div>
+                <button type="button" id="verifyOtpBtn" class="btn">Verify OTP</button>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn" disabled>Submit Payment</button><br><br>
+            <a href="/index">Return to home</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('generateOtpBtn').addEventListener('click', function() {
+            // Validate form fields
+            const form = document.getElementById('transactionForm');
+            if (form.checkValidity()) {
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                alert('Your OTP is: ' + otp);
+                localStorage.setItem('generatedOtp', otp);
+                document.querySelector('.otp-section').style.display = 'block';
+                document.getElementById('submitBtn').disabled = true; // Keep submit button disabled until OTP is verified
+            } else {
+                alert('Please fill in all required fields correctly.');
+                form.reportValidity(); // Trigger native validation messages
+            }
+        });
+
+        document.getElementById('verifyOtpBtn').addEventListener('click', function() {
+            const enteredOtp = document.getElementById('otp').value;
+            const generatedOtp = localStorage.getItem('generatedOtp');
+
+            if (enteredOtp === generatedOtp) {
+                alert('OTP verified successfully!');
+                document.getElementById('submitBtn').disabled = false;
+            } else {
+                alert('Invalid OTP. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Recommendation System</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .leaflet-popup-content {
+            font-size: 14px;
+        }
+        /* Style for the form container */
+        .form-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: #333; /* Dark grey background */
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Ensure it appears on top of the map */
+            width: 250px; /* Increased width */
+            color: white; /* Text color */
+        }
+        .form-container input, .form-container textarea {
+            width: calc(100% - 16px); /* Reduced width to make input boxes smaller */
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff; /* Light background for input fields */
+            color: #333; /* Dark text color for input */
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #efc550; /* Button color */
+            color: white;
+            font-size: 16px;
+        }
+        .form-container a {
+            color: #efc550;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        /* Disable manual entry */
+        .form-container input[readonly] {
+            background-color: #f9f9f9;
+            color: #666;
+        }
+        /* Loader styles */
+        .loader-container {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1001; /* Ensure it appears on top of everything */
+        }
+        .flipping-cards {
+            display: flex;
+            font-size: 43px; /* Increased size by 180% */
+            font-weight: bold;
+            color: #efc550; /* Card color */
+        }
+        .card {
+            margin: 0 2px;
+            animation: flip 1s infinite;
+            display: inline-block;
+        }
+        @keyframes flip {
+            0%, 100% { transform: rotateY(0); }
+            50% { transform: rotateY(180deg); }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <div id="map"></div>
+    <!-- Form Container -->
+    <div class="form-container">
+        <form action="/predict3" id="constraintsForm" method="POST">
+            <label for="location">Country Name:</label>
+            <input type="text" id="location" name="location" readonly placeholder="Click any Country to select">
+
+            <label for="budget_constraints">Budget Constraints (in $):</label>
+            <input type="number" id="budget_constraints" name="budget_constraints" min="0" placeholder="Enter budget constraint in dollars" required>
+
+            <label for="eenergy_requirements">Energy Requirements (in kwH):</label>
+            <input type="number" id="energy_requirements" name="energy_requirements" min="0" placeholder="Enter energy requirement in kwh" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <!-- Return to Home Link -->
+        <a href="index.html">Return to Home</a>
+    </div>
+    <!-- Loader Container -->
+    <div class="loader-container" id="loader-container">
+        <div class="flipping-cards">
+            <div class="card">p</div>
+            <div class="card">r</div>
+            <div class="card">o</div>
+            <div class="card">c</div>
+            <div class="card">e</div>
+            <div class="card">s</div>
+            <div class="card">s</div>
+            <div class="card">i</div>
+            <div class="card">n</div>
+            <div class="card">g</div>
+        </div>
+    </div>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Initialize the map
+    var map = L.map('map').setView([20, 0], 2); // Center map on the world
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Function to handle feature clicks
+    function onEachFeature(feature, layer) {
+        layer.on({
+            click: function (e) {
+                // Get the country name from the clicked feature
+                var countryName = feature.properties.name || "No name available";
+
+                // Set the value of the countryName input field
+                document.getElementById('location').value = countryName;
+
+                // Optionally, open a popup with the country name
+                var popup = L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent(location)
+                    .openOn(map);
+            }
+        });
+    }
+
+    // Fetch GeoJSON data and add it to the map
+    fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data, {
+                onEachFeature: onEachFeature,
+                style: function (feature) {
+                    return {
+                        color: '#333',
+                        weight: 1,
+                        fillOpacity: 0.7
+                    };
+                }
+            }).addTo(map);
+        });
+</script>
+
+</body>
+</html>

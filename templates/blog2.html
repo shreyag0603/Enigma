@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Energy Hub</title>
+    
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
+        :root{
+            --orange: #dda712;
+        }
+
+        * {
+            font-family: 'Nunito', sans-serif;
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            
+            outline: none; border: none;
+            text-decoration: none;
+            transition: all .2s linear;
+            background-color: #000000;
+        }
+
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+            scroll-padding-top: 6rem;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            padding: 2rem 9%;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            background: var(--orange);
+            color: #fff;
+            padding: .8rem 3rem;
+            border: .2rem solid var(--orange);
+            cursor: pointer;
+            font-size: 1.7rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 165, 0, .2);
+            color: var(--orange);
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: #000000;
+            z-index: 2000;
+            display: flex;
+            align-items: first baseline;
+            justify-content: space-between;
+            padding: 0.3rem 9%;
+            max-height: 50%;
+        }
+        
+           
+           header .logo {
+            font-size: 3rem;
+            font-weight: bolder;
+            align-items: baseline;
+            color: #fff;
+            text-transform: uppercase;
+            margin: 0.2 cm;
+           }
+           
+           header .logo span {
+            color: var(--orange);
+            font-size: 5rem;
+            margin: 0.2 cm;
+           }
+           
+           header .navbar.items {
+             display: flex;
+             justify-content:left; /* Center the navbar links */
+             align-items:start;
+             flex: 1; /* Allow the navbar to take up remaining space between logo and login button */
+           }
+           header .navbar a {
+            color: #fff;
+            font-size: 1.7rem;
+            margin: 0.8rem; 
+           }
+           
+           header .navbar a:hover {
+            color: var(--orange);
+           }
+           
+           header .icons i {
+            font-size: 2.5rem;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 0.6rem;
+           }
+           
+           /* General button styles */
+           header .login-button-container, 
+           header .logout-button-container {
+             position: relative;
+             display: inline-block;
+             justify-items: end;
+             align-items: baseline;
+           }
+           
+           header .login-button img, 
+           header .logout-button img {
+             display: inline-block;
+             vertical-align: middle;
+             
+           }
+           /* For the login and logout button images */
+           
+           header .logout-button img {
+             width: 100%; /* Keep based on its container's width */
+             height: auto; /* Maintain aspect ratio */
+             transform: scale(0.8); /* Reduce size by 10% */
+             transition: transform 0.3s ease-in-out; /* Smooth transition */
+           }
+           /* For the login and logout button images */
+           header .login-button img {
+             width: 100%; /* Keep based on its container's width */
+             height: auto; /* Maintain aspect ratio */
+             transform: scale(0.9); /* Reduce size by 10% */
+             transition: transform 0.3s ease-in-out; /* Smooth transition */
+           }
+           
+           
+           /* Tooltip styling */
+           header .login-button .tooltip,
+           header .logout-button .tooltip {
+             position: absolute;
+             top: 100%;
+             left: 50%;
+             transform: translateX(-50%);
+             margin-top: 5px;
+             padding: 5px 10px;
+             background-color: var(--orange);
+             color: black;
+             border-radius: 5px;
+             white-space: nowrap;
+             font-size: 14px;
+             visibility: hidden;
+             opacity: 0;
+             transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+             z-index: 1;
+           }
+           
+           /* Show the tooltip on hover */
+           header .login-button:hover .tooltip,
+           header .logout-button:hover .tooltip {
+             visibility: visible;
+             opacity: 1;
+           }
+           
+           /* Additional button styles */
+           header .login-button {
+             font-size: 0.7rem;
+             cursor: pointer;
+             text-decoration: none;
+           }
+           
+           header .logout-button {
+             font-size: 0.7rem;
+             cursor: pointer;
+             text-decoration: none;
+           }
+           
+           /* Image size adjustments if needed */
+           header .login-button img, 
+           header .logout-button img {
+             width: 40px; /* Adjust as needed */
+             height: 40px; /* Adjust as needed */
+           }
+           
+           header .login-button:hover img, 
+           header .logout-button:hover img {
+             opacity: 0.7; /* Optional hover effect on images */
+           }
+           
+
+        #menu-bar {
+            color: #fff;
+            border: .1rem solid #fff;
+            border-radius: .5rem;
+            font-size: 3rem;
+            padding: .5rem 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+        .hidden-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #f0eeee;
+        }
+        @media (max-width:1200px) {
+            html{
+                font-size: 55%;
+            }
+        }
+
+        @media (max-width:991px) {
+            header{
+                padding: 2rem;
+            }
+            section{
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width:768px) {
+            #menu-bar{
+                display: initial;
+            }
+            header .navbar {
+                position: absolute;
+                top: 100%; right: 0;left: 0;
+                background: #333;
+                border-top: .1rem solid rgba(255,255,255,.2);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            }
+
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            header .navbar a {
+                display: block;
+                border-radius: .5rem;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                background: #222;
+            }
+        }
+
+        @media (max-width:450px) {
+            html{
+                font-size: 50%;
+            }
+            .heading span {
+                font-size: 2.5rem;
+            }  
+        }
+
+       /* Styling for the sidebar */
+       .sidebar {
+        font-size: small;
+        width: 250px; /* Adjust width as needed */
+        background-color: #000; /* Black background */
+        color: #fff; /* White text color for contrast */
+        position: fixed; /* Fix the sidebar to the left */
+        top: 0; /* Align to the top */
+        left: 0; /* Align to the left */
+        height: 100%; /* Full height of the viewport */
+        overflow-y: auto; /* Enable vertical scrolling if needed */
+        padding: 2rem; /* Add padding inside the sidebar */
+        box-shadow: 2px 0 5px rgba(0,0,0,0.5); /* Optional: Add shadow for better visibility */
+        z-index: 1000; /* Ensure it's below the header */
+      }
+      
+
+      
+      /* Adjust main content area to account for sidebar */
+      .content {
+        margin-left: 250px; /* Space for the sidebar */
+        padding: 2rem; /* Add padding to the content */
+        margin-top: 100px; /* Space for the header */
+        background-color: #000000; /* Background color for content */
+        color: #fff; /* Ensure text color is white */
+        border: none; /* Remove any border */
+    }
+    
+      
+      /* Optional: Styling for sidebar links */
+      .sidebar a {
+        color: #fff; /* White text color */
+        text-decoration: none; /* Remove underline */
+        display: block; /* Make links block-level */
+        padding: 1rem; /* Add padding around links */
+        border-bottom: 1px solid rgba(255,255,255,0.2); /* Optional: Add a bottom border */
+      }
+      
+      .sidebar a:hover {
+        background-color: #333; /* Change background on hover */
+      }
+      h2 {
+        font-size: 2.5rem; /* Adjust the size as needed */
+        font-weight: bold;
+        margin-bottom: 1rem; /* Add some space below the heading */
+    }
+    p {
+        text-indent: 3.5em; /* Indents the first line of each paragraph */
+        margin-bottom: 1.5em; /* Adds space below each paragraph */
+    }
+    .full-width-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: white;
+        background-color: var(--orange);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+    }
+    .full-width-button:hover {
+        background-color: #a7700b;
+    }
+    .question {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #fff8f8;
+        
+    }
+    .answer-button {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        color: #857809;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        padding: 0;
+    }
+    .answer-button:hover {
+        text-decoration: underline;
+    }
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <header>
+
+        <div id="menu-bar" class="bars"></div>
+        <a href="/index" class="logo"><span>E</span>nigma</a>
+        
+        <nav class="navbar">
+            <a href="/index">Home</a>
+            <a href="/index#book">Efficiency</a>
+            <a href="/index#portals">Portals</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/index#services">Visualizations</a>
+            <a href="/index#packages">Blogs</a>
+            <a href="/index#review">Review</a>
+            <a href="/index#contact">Contact</a>    
+            {% if 'user_id' in session %}
+            <div class="logout-button-container">
+              <a href="/logout" class="logout-button">
+                  <img src="static/login2.png" alt="Logout">
+                  <span class="tooltip">LOGOUT</span>
+              </a>
+          </div>
+      
+          {% else %}
+          <div class="login-button-container">
+            <a href="/login" class="login-button">
+                <img src="static/login.png" alt="Login">
+                <span class="tooltip">LOGIN</span>
+            </a>
+        </div>
+          {% endif %}      
+        </nav>
+        <link rel="icon" type="image/png" href="static/icon.png">
+    </header>
+    
+    <br><br>
+    <div class="sidebar">
+        <br><br><br><br>
+        <h1>CONTENT</h1>
+        <br>
+        <a href="#climate-change-impacts">Renewable Sources of Energy</a>
+        <a href="#global-temperature-rise">Solar Energy: Harnessing the Power of the Sun</a>
+        <a href="#warming-ocean">Wind Energy: Capturing the Breeze</a>
+        <a href="#shrinking-ice-sheets">Hydropower: Energy from Flowing Water</a>
+        <a href="#glacial-retreat">Biomass Energy: Organic Materials as Fuel</a>
+        
+    </div>
+
+    <div class="content">
+        <div id="climate-change-impacts">
+            <h2 style="font-size:xx-large; color:#efc550;text-align: center;">RENEWABLE SOURCES OF ENERGY</h2><br>
+            <p style="color: #fff; font-size:medium;">
+                As the global community grapples with the challenges of climate change and the depletion of fossil fuels, renewable sources of energy offer a promising path forward. These energy sources are derived from natural processes that are replenished constantly and provide a sustainable alternative to traditional energy systems. This article explores various renewable energy sources, their benefits, and their potential to shape the future of energy production.
+            </p>
+           
+            
+        </div>
+        
+        <div id="global-temperature-rise">
+            <h2 >Solar Energy: Harnessing the Power of the Sun</h2>
+            <p style="color: #fff; font-size:medium;">
+                Solar energy is one of the most abundant and widely used renewable energy sources. It harnesses energy from the sun using photovoltaic cells, which convert sunlight directly into electricity. Solar panels can be installed on rooftops, in solar farms, or even integrated into building materials, making them versatile and adaptable to various settings.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The advantages of solar energy include its environmental benefits and decreasing costs. Solar power reduces greenhouse gas emissions and dependency on fossil fuels. Technological advancements have led to more efficient solar panels and lower installation costs, making solar energy increasingly accessible and economically viable for both residential and commercial applications.
+            </p>
+        
+        </div>
+        
+        <div id="warming-ocean">
+            <h2 >Wind Energy: Capturing the Breeze</h2>
+            <p style="color: #fff; font-size:medium;">
+                Wind energy utilizes the kinetic energy of wind to generate electricity through wind turbines. These turbines are typically located in windy areas, such as coastal regions or open plains, where they can capture the maximum amount of wind energy. The spinning blades of a wind turbine turn a generator that produces electricity, which is then fed into the grid. One of the key benefits of wind energy is its minimal environmental impact. Wind turbines do not emit pollutants during operation and have a relatively small land footprint. Additionally, wind energy can contribute to energy security and reduce reliance on imported fossil fuels. However, challenges such as intermittency and noise must be addressed to maximize the potential of wind energy.
+            </p>
+            
+        </div>
+        
+        <div id="shrinking-ice-sheets">
+            <h2 >Hydropower: Energy from Flowing Water</h2>
+            <p style="color: #fff; font-size:medium;">
+                Hydropower, or hydroelectric power, generates electricity by harnessing the energy of flowing water. This is typically achieved by constructing dams across rivers, creating a reservoir, and then releasing water through turbines to produce electricity. Hydropower is one of the oldest and most established renewable energy sources, with numerous large-scale hydroelectric plants operating worldwide.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The benefits of hydropower include its ability to provide a consistent and reliable source of electricity, as well as its potential for energy storage through pumped storage systems. However, hydropower projects can have significant environmental impacts, such as altering river ecosystems and displacing communities. Balancing the benefits of hydropower with its environmental and social considerations is essential for sustainable development.
+            </p>
+        </div>
+        
+        <div id="glacial-retreat">
+            <h2 >Biomass Energy: Organic Materials as Fuel</h2>
+            <p style="color: #fff; font-size:medium;">
+                Biomass energy is derived from organic materials such as plant and animal waste, which are burned or processed to produce heat, electricity, or biofuels. Common sources of biomass include agricultural residues, wood chips, and municipal solid waste. Biomass energy is considered renewable because the organic materials used can be replenished over time.
+            </p>
+            <p style="color: #fff; font-size:medium;">
+                The advantages of biomass energy include its ability to reduce waste and provide a stable energy source. By converting waste into energy, biomass can help manage waste streams and reduce greenhouse gas emissions. However, the sustainability of biomass energy depends on factors such as land use and resource management, making it important to ensure that biomass sources are managed responsibly.
+            </p>
+            
+        </div>
+      
+        
+        <form action="{{ url_for('generate_summary') }}" method="post">
+            <input type="hidden" name="blog_file" value="blog2.txt">
+            <button type="submit" class="full-width-button">Summarize the Aricle</button>
+        </form>
+        
+        <form action="{{ url_for('generate_faq') }}" method="post">
+            <input type="hidden" name="blog_file" value="blog2.txt">
+            <button type="submit" class="full-width-button">Frequently Asked Questions</button>
+        </form>
+       
+        <div id="questions-container"></div>
+       
+    </div>   
+    
+</body>
+</html>

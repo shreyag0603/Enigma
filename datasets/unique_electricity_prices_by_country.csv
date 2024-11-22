@@ -1,0 +1,192 @@
+Country Name,Country Code,Price of Electricity (US cents per kWh)
+Afghanistan,AFG,18
+Albania,ALB,9.4
+Algeria,DZA,2.1
+Angola,AGO,3.7
+Antigua and Barbuda,ATG,44.9
+Argentina,ARG,10.8
+Armenia,ARM,7.7
+Australia,AUS,20.4
+Austria,AUT,10.2
+Azerbaijan,AZE,4.8
+"Bahamas, The",BHS,28.5
+Bahrain,BHR,6
+Bangladesh,BGD,9.7
+Barbados,BRB,26.6
+Belarus,BLR,14.7
+Belgium,BEL,16.7
+Belize,BLZ,22.6
+Benin,BEN,20.7
+Bhutan,BTN,5.9
+Bolivia,BOL,17.5
+Bosnia and Herzegovina,BIH,11.6
+Botswana,BWA,16.3
+Brazil,BRA,17.5
+Brunei Darussalam,BRN,5
+Bulgaria,BGR,10.7
+Burkina Faso,BFA,23.8
+Burundi,BDI,17.3
+Cabo Verde,CPV,26.3
+Cambodia,KHM,18.2
+Cameroon,CMR,17
+Canada,CAN,12.3
+Central African Republic,CAF,10.5
+Chad,TCD,21.2
+Chile,CHL,10.2
+China,CHN,14.6
+Colombia,COL,19.9
+Comoros,COM,28.1
+"Congo, Dem. Rep.",COD,10
+"Congo, Rep.",COG,8.1
+Costa Rica,CRI,14.4
+Côte d'Ivoire,CIV,12.6
+Croatia,HRV,16.8
+Cyprus,CYP,19.1
+Czech Republic,CZE,13.8
+Denmark,DNK,24.2
+Djibouti,DJI,26.2
+Dominica,DMA,36.8
+Dominican Republic,DOM,20.1
+Ecuador,ECU,11.9
+"Egypt, Arab Rep.",EGY,9.7
+El Salvador,SLV,19.5
+Equatorial Guinea,GNQ,17.4
+Eritrea,ERI,
+Estonia,EST,10.3
+Eswatini,SWZ,16.5
+Ethiopia,ETH,3.6
+Fiji,FJI,21.8
+Finland,FIN,13.3
+France,FRA,13.6
+Gabon,GAB,19.1
+"Gambia, The",GMB,20.2
+Georgia,GEO,6.6
+Germany,DEU,25.6
+Ghana,GHA,23.6
+Greece,GRC,20.4
+Grenada,GRD,30.9
+Guatemala,GTM,20.1
+Guinea,GIN,20.3
+Guinea-Bissau,GNB,27.3
+Guyana,GUY,32.8
+Haiti,HTI,21.1
+Honduras,HND,20.8
+"Hong Kong, China",HKG,16.1
+Hungary,HUN,18
+Iceland,ISL,12.2
+India,IND,18.2
+Indonesia,IDN,10.9
+"Iran, Islamic Rep.",IRN,5.2
+Iraq,IRQ,8.5
+Ireland,IRL,19
+Israel,ISR,11.8
+Italy,ITA,16.8
+Jamaica,JAM,26.4
+Japan,JPN,21.2
+Jordan,JOR,24.6
+Kazakhstan,KAZ,4.4
+Kenya,KEN,21.7
+Kiribati,KIR,41.3
+"Korea, Rep.",KOR,11.4
+Kosovo,XKX,9.5
+Kuwait,KWT,0.7
+Kyrgyz Republic,KGZ,3.6
+Lao PDR,LAO,13.2
+Latvia,LVA,11.4
+Lebanon,LBN,13
+Lesotho,LSO,13.9
+Liberia,LBR,39
+Libya,LBY,12.6
+Liechtenstein,LIE,9.5
+Lithuania,LTU,9.5
+Luxembourg,LUX,12.1
+Madagascar,MDG,11.3
+Malawi,MWI,17.2
+Malaysia,MYS,12
+Maldives,MDV,39.4
+Mali,MLI,14.2
+Malta,MLT,19
+Marshall Islands,MHL,40.6
+Mauritania,MRT,17.6
+Mauritius,MUS,20.5
+Mexico,MEX,16.5
+"Micronesia, Fed. Sts.",FSM,41.4
+Moldova,MDA,8.5
+Mongolia,MNG,5.6
+Montenegro,MNE,14.1
+Morocco,MAR,12.4
+Mozambique,MOZ,9.6
+Myanmar,MMR,8.1
+Namibia,NAM,15.1
+Nepal,NPL,12
+Netherlands,NLD,14.4
+New Zealand,NZL,12
+Nicaragua,NIC,33.4
+Niger,NER,21.3
+Nigeria,NGA,11.9
+North Macedonia,MKD,15.5
+Norway,NOR,10.1
+Oman,OMN,6
+Pakistan,PAK,21.7
+Palau,PLW,32.1
+Panama,PAN,25.4
+Papua New Guinea,PNG,28.9
+Paraguay,PRY,6.6
+Peru,PER,19.5
+Philippines,PHL,18.1
+Poland,POL,13.7
+Portugal,PRT,22.2
+Puerto Rico,PRI,24.3
+Qatar,QAT,3.7
+Romania,ROU,9.2
+Russian Federation,RUS,8.4
+Rwanda,RWA,13.7
+Samoa,WSM,38.5
+San Marino,SMR,15.5
+São Tomé and Principe,STP,18.3
+Saudi Arabia,SAU,7.4
+Senegal,SEN,18.2
+Serbia,SRB,10.7
+Seychelles,SYC,32.1
+Sierra Leone,SLE,18
+Singapore,SGP,5.5
+Slovak Republic,SVK,15.6
+Slovenia,SVN,26.6
+Solomon Islands,SLB,71.6
+Somalia,SOM,10.9
+South Africa,ZAF,16.1
+South Sudan,SSD,11.7
+Spain,ESP,26
+Sri Lanka,LKA,17.3
+St. Kitts and Nevis,KNA,30.6
+St. Lucia,LCA,32.1
+St. Vincent and the Grenadines,VCT,34.6
+Sudan,SDN,2.4
+Suriname,SUR,7.2
+Sweden,SWE,10.4
+Switzerland,CHE,13.6
+Syrian Arab Republic,SYR,7.8
+"Taiwan, China",TWN,11.7
+Tajikistan,TJK,6.3
+Tanzania,TZA,12.6
+Thailand,THA,13.7
+Timor-Leste,TLS,23.4
+Togo,TGO,17.6
+Tonga,TON,36.2
+Trinidad and Tobago,TTO,6.6
+Tunisia,TUN,7.7
+Turkey,TUR,8.9
+Uganda,UGA,16.9
+Ukraine,UKR,6.4
+United Arab Emirates,ARE,10.9
+United Kingdom,GBR,17.7
+United States,USA,18.1
+Uruguay,URY,16.7
+Uzbekistan,UZB,5.2
+Vanuatu,VUT,38.2
+"Venezuela, RB",VEN,123.8
+Vietnam,VNM,12.5
+West Bank and Gaza,PSE,17.6
+"Yemen, Rep.",YEM,10.3
+Zambia,ZMB,4.6
+Zimbabwe,ZWE,12.4

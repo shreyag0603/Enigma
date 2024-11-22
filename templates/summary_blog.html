@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+            background-color: black;
+        }
+
+        h1 {
+            background-color: white; /* Set background to white */
+            color: #d4a010; /* Set text color to #d4a010 */
+           
+            padding: 10px 15px; /* Add padding for better appearance */
+            border-radius: 5px; /* Optional: make the header slightly rounded */
+        }
+
+        .summary-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .summary-text {
+            background: #e6b326;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        /* Style for the Back to Blog button */
+        .back-button {
+            display: inline-block;
+            padding: 12px;
+            font-size: 18px;
+            background-color: white; /* Set background to white */
+            color: #d4a010; /* Set text color to #d4a010 */
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Make the button full width */
+            box-sizing: border-box; /* Ensure padding is included in the width */
+            margin-top: 20px; /* Add some space above the button */
+        }
+
+        .back-button:hover {
+            background-color: #d4a010; /* Change background on hover */
+            color: white; /* Change text color on hover */
+        }
+
+    </style>
+    <link rel="icon" type="image/png" href="static/icon.png">
+</head>
+<body>
+    <div class="summary-container" style="background-color:#e6b326;">
+        <h1>Summary</h1>
+        <div class="summary-text">
+            {{ summary }}
+        </div>
+        <a href="{{ url_for('index') }}" class="back-button">Back to Blog</a>
+    </div>
+</body>
+</html>
